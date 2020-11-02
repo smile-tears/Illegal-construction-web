@@ -1,0 +1,20 @@
+1、解决模态窗口可以下拉
+node_modaules/ant-design-vue/es/modal/style/modal.less
+&-body 增加以下属性
+max-height: 650px;  //增加这里 使模态窗口变为最高650
+overflow: auto;//增加这里 使模态窗口变为最高650
+
+
+2、解决 vue 项目一直出现sockjs-node/info?t=1554978****
+/node_modules/sockjs-client/dist/sockjs.js 
+找到代码的 1605行，注释掉
+try {
+    //  self.xhr.send(payload); 把这里注掉
+} catch (e) {
+    self.emit('finish', 0, '');
+    self._cleanup(false);
+}
+
+
+3、打包时 /src/config/defaultSettings.js中17行
+wsUrl要修改成发布地方的websocket地址
