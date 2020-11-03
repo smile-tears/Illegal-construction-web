@@ -33,8 +33,16 @@ export const asyncRouterMap = [
           {
             path: '/appMaintainSystem/gridcommunity',
             name: 'gridcommunity',
-            component: () => import('../views/appMaintainSystem/GridView'),
+            // component: () => import('../views/appMaintainSystem/GridView'),
+            component: () => import('../views/appMaintainSystem/gridcommunity/GridCommunityList'),
+            
             meta: { title: '网格管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+          },
+          {
+            path: '/appMaintainSystem/companyManage',
+            name: 'companyManage',
+            component: () => import('../views/appMaintainSystem/companymanage/CompanyManageList'),
+            meta: { title: '公司管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
           }
           // ,
           // {

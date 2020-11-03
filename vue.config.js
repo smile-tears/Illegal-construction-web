@@ -93,7 +93,7 @@ const vueConfig = {
     proxy: {
       '/api': {
         // target: 'http://localhost:3000', // 要访问的接口域名
-        target: 'http://localhost:8088',
+        target: 'http://localhost:8089',
         ws: true, // 是否启用websockets
         changeOrigin: true,
         pathRewrite: {

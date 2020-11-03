@@ -81,7 +81,7 @@
                        style="width: 669px;margin-left: 35px" v-show="true">
             <a-textarea :disabled="modalData.disabled" v-decorator="['gridPosition', {}]"/>
           </a-form-item>
-          <a-form-item label="父级菜单" style="margin-left: 35px" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <!-- <a-form-item label="父级菜单" style="margin-left: 35px" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
             <a-tree-select
               :disabled="modalData.disabled"
               v-decorator="['pid', { rules: [{ required: true, message: '父级菜单必填！' }] }]"
@@ -91,7 +91,7 @@
               placeholder="Please select"
               tree-default-expand-all
             ></a-tree-select>
-          </a-form-item>
+          </a-form-item> -->
         </a-form>
       </a-spin>
     </a-modal>
