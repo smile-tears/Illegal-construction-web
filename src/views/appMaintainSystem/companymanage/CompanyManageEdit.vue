@@ -23,9 +23,38 @@
           <a-input :disabled="modalData.disabled" v-decorator="['legalPerson', {}]" />
         </a-form-item>
         <a-form-item label="网格" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-          <a-input :disabled="modalData.disabled" v-decorator="['grid', {}]" />
+          <a-select
+            :disabled="modalData.disabled"
+            show-search
+            placeholder=""
+            option-filter-prop="children"
+            style="width: 200px"
+            :filter-option="filterOption"
+            v-decorator="['grid', {}]" 
+          >
+            <a-select-option v-for="(grid) in gridDataList" :key="grid.id" :value="grid.id" >
+              {{grid.gridName}}
+            </a-select-option>
+          </a-select>
         </a-form-item>
-
+        <a-form-item
+          :label-col="labelCol" :wrapper-col="wrapperCol"
+          label="附件"
+        >
+          <a-upload
+            :disabled="modalData.disabled"
+            name="file"
+            :action="BASE_URL+'/upload'"
+            :multiple="true"
+            :file-list="fileList"
+            :remove="handleRemove"
+            @change="handleFileChange"
+          >
+            <a-button v-if="!modalData.disabled">
+              <a-icon type="upload" />附件上传
+            </a-button>
+          </a-upload>
+        </a-form-item>
         <!-- <a-form-item label="父级公司管理" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-tree-select
             :disabled="modalData.disabled"
@@ -43,14 +72,19 @@
 </template>
 
 <script>
-import { companyManagePost, companyManagePut, companyManageTree } from '@/api/companyManage'
+import { companyManagePost, companyManagePut } from '@/api/companyManage'
+import {gridCommunityList} from '@/api/gridCommunity'
+const BASE_URL = process.env.NODE_ENV === 'production' ? '' : '/api'
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['modalData'],
   created() {
+    this.gridList()
   },
   data() {
     return {
+      BASE_URL: BASE_URL,
+      fileList: [],
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 },
@@ -62,6 +96,7 @@ export default {
       formLayout: 'horizontal',
       confirmLoading: false,
       treeData: [],
+      gridDataList: []
     }
   },
   watch: {
@@ -70,6 +105,28 @@ export default {
       if (modalData.visible === true) {
         this.$nextTick(() => {
           delete this.modalData.record.delTag
+
+          var fileName = this.modalData.record.fileName
+          var filePath = this.modalData.record.filePath
+
+          this.fileList = []
+          if (fileName && fileName !== '') {
+            fileName = fileName.split(',')
+            filePath = filePath.split(',')
+            for (var i=0; i< fileName.length; i++) {
+              var obj = {
+                uid: i,
+                name: fileName[i],
+                fileName: fileName[i],
+                status: 'done',
+                url: BASE_URL + filePath[i],
+                // response: {
+                //   result: file
+                // }
+              }
+              this.fileList.push(obj)
+            }
+          }
           this.form.setFieldsValue({ ...this.modalData.record })
         })
       }
@@ -86,6 +143,23 @@ export default {
         // 验证表单没错误
         if (!err) {
           // console.log('form values', values)
+          var filePath = []
+          var fileName = []
+          this.fileList.forEach(file => {
+            var result = null
+            if (file.response !== undefined) {
+              result = file.response.result
+            } else {
+              result = file
+            }
+            
+            filePath.push(result.url)
+            fileName.push(result.fileName)
+          })
+          if (filePath.length > 0) {
+            values.filePath = filePath.join(',')
+            values.fileName = fileName.join(',')
+          }
           var api = values.id === undefined ? companyManagePost : companyManagePut
           api(values)
             .then((res) => {
@@ -100,8 +174,40 @@ export default {
         }
       })
     },
+    handleFileChange ({ fileList }) {
+      this.fileList = fileList
+    },
+    handleRemove (obj) {
+      // var id = obj.response.result.id
+      // if (id !== undefined) {
+      //   caseInfoFileCityDelete(qs.stringify({ id: id }))
+      //     .then(res => {
+      //       if (res.code === 200) {
+      //         //
+      //       }
+      //     })
+      //     .catch(() => {})
+      // }
+    },
     handleCancel() {
       this.modalData.visible = false
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
+    gridList() {
+      gridCommunityList()
+        .then(res => {
+          if (res.code === 200) {
+            this.gridDataList = res.result.data
+          }
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch(err => {
+          // Do something
+        })
     }
   },
 }

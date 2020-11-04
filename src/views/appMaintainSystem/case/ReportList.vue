@@ -1,20 +1,5 @@
 <template>
   <div class="container">
-    <!-- <div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="8" :sm="8">
-            <a-form-item label="角色名称">
-              <a-input v-model="queryParam.caseName" placeholder />
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="8">
-            <a-button type="primary" icon="search" @click="loadData">查询</a-button>
-            <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div> -->
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="add">新建</a-button>
       <a-button type="danger" icon="delete" @click="del('batch')">删除</a-button>
@@ -60,22 +45,27 @@ const columns = [
     scopedSlots: { customRender: 'serial' }
   },
   {
-    title: '案件来源',
-    dataIndex: 'casesource',
-    key: 'casesource'
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title'
   },
   {
-    title: '案件类型',
-    dataIndex: 'caseType',
+    title: '上报时间',
+    dataIndex: 'reportTime',
     key: 'caseType'
   },
   {
-    title: '样本',
-    dataIndex: 'sampleName',
-    key: 'sampleName'
+    title: '上报人',
+    dataIndex: 'reportorName',
+    key: 'reportorName'
   },
   {
-    title: '案件描述',
+    title: '处置时限',
+    dataIndex: 'limittimes',
+    key: 'limittimes'
+  },
+  {
+    title: '备注',
     dataIndex: 'caseDesc',
     key: 'caseDesc'
   },
@@ -84,11 +74,7 @@ const columns = [
     dataIndex: 'locationDesc',
     key: 'locationDesc'
   },
-  {
-    title: '上报时间',
-    dataIndex: 'reporTime',
-    key: 'reporTime'
-  },
+  
   {
     title: '操作',
     key: 'action',

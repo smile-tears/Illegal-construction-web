@@ -151,11 +151,12 @@
       DrawGridArea
     },
     created() {
-      this.eventBus.$on('transferGridNode', GridNode => {
-        // 接收事件
-        this.GridNode = GridNode;
-        this.loadData()
-      });
+      // this.eventBus.$on('transferGridNode', GridNode => {
+      //   // 接收事件
+      //   this.GridNode = GridNode;
+      //   this.loadData()
+      // });
+      this.loadData()
       this.idAndName();
     },
 
@@ -223,7 +224,7 @@
       },
       loadData() {
         var params = {
-          pid: this.GridNode.value,
+          // pid: this.GridNode.value,
           pageNo: this.pagination.current,
           pageSize: this.pagination.pageSize,
           ...this.queryParam
@@ -244,7 +245,7 @@
       add() {
         this.modalData = {
           record: {
-            pid: this.GridNode.value
+            // pid: this.GridNode.value
           },
           visible: true,
           disabled: false,
@@ -257,7 +258,7 @@
           .then(res => {
             if (res.code === 200) {
               this.loadData();
-              this.eventBus.$emit('refreshGridTree', this.GridNode)
+              // this.eventBus.$emit('refreshGridTree', this.GridNode)
             } else {
               this.$message.error(res.message)
             }
@@ -289,7 +290,7 @@
       },
       handleModalEvent(res) {
         this.loadData();
-        this.eventBus.$emit('refreshGridTree', this.GridNode)
+        // this.eventBus.$emit('refreshGridTree', this.GridNode)
       },
       onSelectChange(selectedRowKeys) {
         // console.log('selectedRowKeys changed: ', selectedRowKeys);

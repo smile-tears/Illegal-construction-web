@@ -21,7 +21,19 @@
           </a-col> -->
           <a-col :md="8" :sm="8">
             <a-form-item label="网格">
-              <a-input v-model="queryParam.grid" placeholder="" />
+              <!-- <a-input v-model="queryParam.grid" placeholder="" /> -->
+              <a-select
+                show-search
+                placeholder=""
+                option-filter-prop="children"
+                style="width: 200px"
+                :filter-option="filterOption"
+                v-model="queryParam.grid"
+              >
+                <a-select-option v-for="(grid) in gridDataList" :key="grid.id" :value="grid.id" >
+                  {{grid.gridName}}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
@@ -68,6 +80,7 @@
 <script>
 import { companyManageList, companyManageDelete } from '@/api/companyManage'
 import CompanyManageEdit from './CompanyManageEdit'
+import {gridCommunityList} from '@/api/gridCommunity'
 import qs from 'qs'
 
 const columns = [
@@ -95,11 +108,11 @@ const columns = [
     dataIndex: 'legalPerson',
     key: 'legalPerson',
   },
-  {
-    title: '网格',
-    dataIndex: 'grid',
-    key: 'grid',
-  },
+  // {
+  //   title: '网格',
+  //   dataIndex: 'grid',
+  //   key: 'grid',
+  // },
   {
     title: '操作',
     key: 'action',
@@ -113,6 +126,7 @@ export default {
   },
   mounted() {
     this.loadData()
+    this.gridList()
   },
   // created() {
   //   this.eventBus.$on('transferCompanyManageNode', (companyManageNode) => {
@@ -124,6 +138,7 @@ export default {
   data() {
     return {
       data: [],
+      gridDataList: [],
       columns,
       selectedRowKeys: [],
       pagination: {
@@ -206,6 +221,23 @@ export default {
       this.pagination = pagination
       this.loadData()
     },
+    gridList() {
+      gridCommunityList()
+        .then(res => {
+          if (res.code === 200) {
+            this.gridDataList = res.result.data
+          }
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch(err => {
+          // Do something
+        })
+    },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    }
   },
 }
 </script>
