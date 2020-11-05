@@ -74,8 +74,9 @@
         </a-select>
       </a-form-item>
 
-      <a-form-item label="处置时限" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-        <a-input :disabled="modalData.disabled" v-decorator="['limittimes', {}]" />
+      <a-form-item label="处置时限" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true" >
+        <a-input :disabled="modalData.disabled" v-decorator="['limittimes', 
+          { rules: [{ required: true, type: 'number',message: '请输入数字！',transform:(value)=> {return Number(value)} }] }]" style="width: 200px;" />（小时）
       </a-form-item>
 
       <a-form-item

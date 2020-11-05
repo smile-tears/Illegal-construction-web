@@ -23,6 +23,11 @@
       <span slot="serial" slot-scope="text, record, index">
         {{ index + 1 }}
       </span>
+      <span slot="state" slot-scope="text, record">
+        <div v-if="parseInt(record.state) === 0" class="dot" style="background: green;width: 12px;height: 12px;border-radius: 6px;"></div>
+        <div v-if="parseInt(record.state) === 1" class="dot" style="background: red;width: 12px;height: 12px;border-radius: 6px;"></div>
+        <div v-if="parseInt(record.state) === 2" class="dot" style="background: red;width: 12px;height: 12px;border-radius: 6px;"></div>
+      </span>
       <template slot="action" slot-scope="text,record">
         <a @click="info(record)">查看</a>
         <a-divider type="vertical" />
@@ -50,19 +55,28 @@ const columns = [
     key: 'title'
   },
   {
+    title: '状态',
+    scopedSlots: { customRender: 'state' }
+  },
+  {
     title: '上报时间',
     dataIndex: 'reportTime',
     key: 'caseType'
   },
   {
     title: '上报人',
-    dataIndex: 'reportorName',
-    key: 'reportorName'
+    dataIndex: 'name',
+    key: 'name'
   },
   {
     title: '处置时限',
     dataIndex: 'limittimes',
     key: 'limittimes'
+  },
+  {
+    title: '案件结束时间',
+    dataIndex: 'endDate',
+    key: 'endDate'
   },
   {
     title: '备注',
