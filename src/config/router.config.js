@@ -121,8 +121,29 @@ export const asyncRouterMap = [
           {
             path: '/superviseAcceptSystem/caseReport',
             name: 'caseReport',
+            props: {
+              page: '0'
+            },
             component: () => import('../views/appMaintainSystem/case/ReportList'),
             meta: { title: '案件上报', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+          },
+          {
+            path: '/superviseAcceptSystem/caseHandle',
+            name: 'caseHandle',
+            props: {
+              page: '1'
+            },
+            component: () => import('../views/appMaintainSystem/case/ReportList'),
+            meta: { title: '案件处置', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+          },
+          {
+            path: '/superviseAcceptSystem/caseSearch',
+            name: 'caseSearch',
+            props: {
+              page: '2'
+            },
+            component: () => import('../views/appMaintainSystem/case/ReportList'),
+            meta: { title: '案件查询', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
           }
           // ,
           // {
@@ -140,51 +161,51 @@ export const asyncRouterMap = [
         ]
       },
 
-      {
-        path: '/teamWork',
-        name: 'teamWork',
-        component: PageView,
-        meta: { title: '协同工作子系统', icon: 'slack', permission: ['support'] },
-        children: [
-          {
-            path: '/teamWork/registerManage',
-            name: 'registerManage',
-            component: () => import('@/views/teamWork/register/Register'),
-            meta: { title: '立案管理', permission: ['support'] }
-          },
-          // {
-          //   path: '/teamWork/commandCenterFull',
-          //   name: 'commandCenterFull',
-          //   component: () => import('@/views/teamWork/FullScreen'),
-          //   meta: { title: '指挥中心-大屏', keepAlive: true, permission: ['support'] }
-          // },
-          {
-            path: '/teamWork/commandCenter',
-            name: 'commandCenter',
-            component: () => import('@/views/teamWork/commandCenter/List'),
-            meta: { title: '指挥中心', keepAlive: true, permission: ['support'] }
-          },
-          {
-            path: '/teamWork/caseHandling',
-            name: 'caseHandling',
-            component: () => import('@/views/teamWork/caseHandle'),
-            meta: { title: '案件处置', keepAlive: true, permission: ['support'] }
-          },
-          {
-            path: '/teamWork/caseVerification',
-            name: 'caseVerification',
-            component: () => import('@/views/teamWork/caseVerification'),
-            meta: { title: '案件核查', keepAlive: true, permission: ['support'] }
-          },
-          {
-            path: '/teamWork/integratedQuery',
-            name: 'integratedQuery',
-            // component: () => import('@/views/teamWork/commandCenter/List'),
-            component: () => import('@/views/appMaintainSystem/case/CaseSearch'),
-            meta: { title: '综合查询', keepAlive: true, permission: ['support'] }
-          }
-        ]
-      },
+      // {
+      //   path: '/teamWork',
+      //   name: 'teamWork',
+      //   component: PageView,
+      //   meta: { title: '协同工作子系统', icon: 'slack', permission: ['support'] },
+      //   children: [
+      //     {
+      //       path: '/teamWork/registerManage',
+      //       name: 'registerManage',
+      //       component: () => import('@/views/teamWork/register/Register'),
+      //       meta: { title: '立案管理', permission: ['support'] }
+      //     },
+      //     // {
+      //     //   path: '/teamWork/commandCenterFull',
+      //     //   name: 'commandCenterFull',
+      //     //   component: () => import('@/views/teamWork/FullScreen'),
+      //     //   meta: { title: '指挥中心-大屏', keepAlive: true, permission: ['support'] }
+      //     // },
+      //     {
+      //       path: '/teamWork/commandCenter',
+      //       name: 'commandCenter',
+      //       component: () => import('@/views/teamWork/commandCenter/List'),
+      //       meta: { title: '指挥中心', keepAlive: true, permission: ['support'] }
+      //     },
+      //     // {
+      //     //   path: '/teamWork/caseHandling',
+      //     //   name: 'caseHandling',
+      //     //   component: () => import('@/views/teamWork/caseHandle'),
+      //     //   meta: { title: '案件处置', keepAlive: true, permission: ['support'] }
+      //     // },
+      //     {
+      //       path: '/teamWork/caseVerification',
+      //       name: 'caseVerification',
+      //       component: () => import('@/views/teamWork/caseVerification'),
+      //       meta: { title: '案件核查', keepAlive: true, permission: ['support'] }
+      //     },
+      //     // {
+      //     //   path: '/teamWork/integratedQuery',
+      //     //   name: 'integratedQuery',
+      //     //   // component: () => import('@/views/teamWork/commandCenter/List'),
+      //     //   component: () => import('@/views/appMaintainSystem/case/CaseSearch'),
+      //     //   meta: { title: '综合查询', keepAlive: true, permission: ['support'] }
+      //     // }
+      //   ]
+      // },
       // {
       //   path: '/superviseCommandSystem',
       //   name: 'superviseCommandSystem',
