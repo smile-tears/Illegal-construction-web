@@ -16,4 +16,4 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = '数字化城市管理平台'
+export const domTitle = '堰桥智慧安监平台'

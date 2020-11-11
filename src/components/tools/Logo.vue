@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <router-link :to="{name:'dashboard'}">
-      <LogoSvg alt="logo" />
+      <!--<LogoSvg alt="logo" />-->
       <h1 v-if="showTitle">{{ title }}</h1>
     </router-link>
   </div>
@@ -18,7 +18,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '数字化城市管理平台',
+      default: '堰桥智慧安监平台',
       required: false
     },
     showTitle: {

@@ -14,7 +14,7 @@ export const asyncRouterMap = [
       {
         path: '/firstPage',
         name: 'FullScreen',
-        component: () => import('@/views/teamWork/FullScreen'),
+        component: () => import('@/views/teamWork/FullScreen2'),
         meta: { title: '首页', icon: 'line-chart', keepAlive: false, permission: [ 'dashboard' ] }
       },
 
@@ -35,7 +35,6 @@ export const asyncRouterMap = [
             name: 'gridcommunity',
             // component: () => import('../views/appMaintainSystem/GridView'),
             component: () => import('../views/appMaintainSystem/gridcommunity/GridCommunityList'),
-            
             meta: { title: '网格管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
           },
           {
@@ -314,77 +313,77 @@ export const asyncRouterMap = [
       //   ]
       // },
 
-      // {
-      //   path: '/demo',
-      //   name: 'demo',
-      //   component: PageView,
-      //   meta: { title: 'Demo', icon: 'slack', permission: ['support'] },
-      //   children: [
-      //     {
-      //       path: '/other/teamWork',
-      //       component: RouteView,
-      //       meta: { title: '超时查询', permission: ['support'] },
-      //       redirect: '/other/teamWork/tree-list',
-      //       children: [
-      //         {
-      //           path: '/other/teamWork/QueryRegister',
-      //           name: 'QueryRegister',
-      //           component: () => import('@/views/teamWork/QueryRegister'),
-      //           meta: { title: '立案超时查询', keepAlive: true, permission: ['support'] }
-      //         }
-      //
-      //       ]
-      //     },
-      //     {
-      //       path: '/other/teamWork/TestAmap',
-      //       name: 'TestAmap',
-      //       component: () => import('@/views/teamWork/TestAmap'),
-      //       meta: { title: '高德地图demo', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/teamWork/DrawGridDemo',
-      //       name: 'DrawGridDemo',
-      //       component: () => import('@/views/teamWork/DrawGridDemo'),
-      //       meta: { title: '画网格demo', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/teamWork/FullScreen',
-      //       name: 'FullScreen',
-      //       component: () => import('@/views/teamWork/FullScreen'),
-      //       meta: { title: '全屏地图', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/teamWork/ReplayHis',
-      //       name: 'ReplayHis',
-      //       component: () => import('@/views/teamWork/ReplayHis'),
-      //       meta: { title: '轨迹回放', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/teamWork/TestWebSocket',
-      //       name: 'TestWebSocket',
-      //       component: () => import('@/views/teamWork/TestWebSocket'),
-      //       meta: { title: 'WebSocket Demo', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/demo/MyCarousel',
-      //       name: 'MyCarousel',
-      //       component: () => import('@/views/demo/MyCarousel'),
-      //       meta: { title: '走马灯', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/demo/Heatmap',
-      //       name: 'Heatmap',
-      //       component: () => import('@/views/demo/Heatmap'),
-      //       meta: { title: '热力图', keepAlive: true, permission: ['support'] }
-      //     },
-      //     {
-      //       path: '/other/demo/ScrollList',
-      //       name: 'ScrollList',
-      //       component: () => import('@/views/demo/ScrollList'),
-      //       meta: { title: '滚动列表', keepAlive: true, permission: ['support'] }
-      //     }
-      //   ]
-      // },
+      {
+        path: '/demo',
+        name: 'demo',
+        component: PageView,
+        meta: { title: 'Demo', icon: 'slack', permission: ['support'] },
+        children: [
+          {
+            path: '/other/teamWork',
+            component: RouteView,
+            meta: { title: '超时查询', permission: ['support'] },
+            redirect: '/other/teamWork/tree-list',
+            children: [
+              {
+                path: '/other/teamWork/QueryRegister',
+                name: 'QueryRegister',
+                component: () => import('@/views/teamWork/QueryRegister'),
+                meta: { title: '立案超时查询', keepAlive: true, permission: ['support'] }
+              }
+
+            ]
+          },
+          {
+            path: '/other/teamWork/TestAmap',
+            name: 'TestAmap',
+            component: () => import('@/views/teamWork/TestAmap'),
+            meta: { title: '高德地图demo', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/teamWork/DrawGridDemo',
+            name: 'DrawGridDemo',
+            component: () => import('@/views/teamWork/DrawGridDemo'),
+            meta: { title: '画网格demo', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/teamWork/FullScreen',
+            name: 'FullScreen',
+            component: () => import('@/views/teamWork/FullScreen'),
+            meta: { title: '全屏地图', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/teamWork/ReplayHis',
+            name: 'ReplayHis',
+            component: () => import('@/views/teamWork/ReplayHis'),
+            meta: { title: '轨迹回放', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/teamWork/TestWebSocket',
+            name: 'TestWebSocket',
+            component: () => import('@/views/teamWork/TestWebSocket'),
+            meta: { title: 'WebSocket Demo', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/demo/MyCarousel',
+            name: 'MyCarousel',
+            component: () => import('@/views/demo/MyCarousel'),
+            meta: { title: '走马灯', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/demo/Heatmap',
+            name: 'Heatmap',
+            component: () => import('@/views/demo/Heatmap'),
+            meta: { title: '热力图', keepAlive: true, permission: ['support'] }
+          },
+          {
+            path: '/other/demo/ScrollList',
+            name: 'ScrollList',
+            component: () => import('@/views/demo/ScrollList'),
+            meta: { title: '滚动列表', keepAlive: true, permission: ['support'] }
+          }
+        ]
+      },
 
       // dashboard
       // {

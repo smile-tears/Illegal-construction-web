@@ -51,7 +51,7 @@
         var _this = this;
         const map = new AMap.Map('container',{
           zoom:13,
-          center:[118.76979, 32.066336]
+          center:[120.299768,31.575841]
         })
         //添加默认的icon
         var endIcon = new AMap.Icon({
