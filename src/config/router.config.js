@@ -2,7 +2,7 @@
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
 
-export const asyncRouterMap = [
+export const asyncRouterMap111 = [
 
   {
     path: '/',
@@ -24,12 +24,6 @@ export const asyncRouterMap = [
         component: PageView,
         meta: { title: '应用维护子系统', icon: 'setting', permission: ['dashboard'] },
         children: [
-          // {
-          //   path: '/appMaintainSystem/questiontype',
-          //   name: 'questiontype',
-          //   component: () => import('../views/appMaintainSystem/QuestionTypeView'),
-          //   meta: { title: '类型管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
-          // },
           {
             path: '/appMaintainSystem/gridcommunity',
             name: 'gridcommunity',
@@ -43,13 +37,6 @@ export const asyncRouterMap = [
             component: () => import('../views/appMaintainSystem/companymanage/CompanyManageList'),
             meta: { title: '公司管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
           }
-          // ,
-          // {
-          //   path: '/appMaintainSystem/sample',
-          //   name: 'sample',
-          //   component: () => import('../views/appMaintainSystem/SampleView'),
-          //   meta: { title: '样本管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
-          // }
         ]
       },
 
@@ -76,7 +63,19 @@ export const asyncRouterMap = [
             name: 'role',
             component: () => import('@/views/appMaintainSystem/role/RoleList'),
             meta: { title: '角色管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
-          }
+          },
+          {
+            path: '/baseDataSystem/menu',
+            name: 'MenuView',
+            component: () => import('@/views/appMaintainSystem/MenuView'),
+            meta: { title: '菜单管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+          },
+          {
+            path: '/baseDataSystem/auth',
+            name: 'auth',
+            component: () => import('@/views/appMaintainSystem/MenuAuthView'),
+            meta: { title: '菜单分配', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+          },
           // ,
           // {
           //   path: '/baseDataSystem/job',

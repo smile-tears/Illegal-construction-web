@@ -6,9 +6,9 @@
     <p class='input-item'>案件样本 : {{record.sampleStr}}</p>
     <p class='input-item'>案件描述 : {{(record.caseDesc?record.caseDesc:'')}}</p>
     <p class='input-item'>案件位置描述 : {{(record.locationDesc?record.locationDesc:'')}}</p>
-    <a-carousel autoplay v-for="(item,key) in record.files" key="{{key}}">
+    <!-- <a-carousel autoplay v-for="(item,key) in record.files" key="{{key}}">
       <div><img class='caseImg' src='/api/{{item.url}}'></div>
-    </a-carousel>
+    </a-carousel> -->
     <p class='input-item'><a @click='confirmCase(record.id)'>立案处理</a></p>
   </div>
 

@@ -92,7 +92,7 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      //mainMenu: JSON.parse(window.sessionStorage.getItem('addRoutes'))
     }),
     contentPaddingLeft () {
       if (!this.fixSidebar || this.isMobile()) {
@@ -110,8 +110,10 @@ export default {
     }
   },
   created () {
-    const routes = convertRoutes(this.mainMenu.find(item => item.path === '/'))
+    var mainMenu = JSON.parse(window.sessionStorage.getItem('addRoutes'))
+    const routes = convertRoutes(mainMenu.find(item => item.path === '/'))
     this.menus = (routes && routes.children) || []
+    var a = this.menus
     this.collapsed = !this.sidebarOpened
   },
   mounted () {
