@@ -19,7 +19,7 @@
     </a-col>
 
     <div id="gridContainer" class="input-card" style="width: 400px">
-      <a-table :columns="columns" :data-source="gridCommunitys" :pagination="false">
+      <a-table rowKey="id" :columns="columns" :data-source="gridCommunitys" :pagination="false">
 
         <span slot="action" slot-scope="text, record">
           <a @click="callVideo(record)">视频通话</a>
@@ -75,6 +75,7 @@
   //import AMap from 'AMap'
   import RegisterList from './register/List'
   import { gridCommunityList } from '@/api/gridCommunity'
+  import { companyManageList } from '@/api/companyManage'
   import qs from 'qs'
   import  Vue from "vue/dist/vue.esm.js"
   import config from '@/config/defaultSettings'
@@ -93,6 +94,7 @@
         polygon:null,
         grids:[],
         gridCommunitys:[],
+        companyManages:[],
         divHeight:618,
         isFullScreen:false,
         markerArr: [],
@@ -106,9 +108,9 @@
           },
           {
             title: '负责人',
-            dataIndex: 'manager',
-            key: 'manager',
-            width: 120
+            dataIndex: 'name',
+            key: 'name',
+            width: 100
           },
           {
             title: '电话',
@@ -198,8 +200,6 @@
           (function (j) {
             var polygon2 = polygonArr[j];
             polygon2.on('click', () => {
-//              console.log(arguments);
-//              console.log('polygon2.path',polygon2.getPath( ))
               _this.polygon = polygon2
 //              polyEditor.setTarget(polygon2);
 //              polyEditor.open();
@@ -231,11 +231,16 @@
 
 
         //此处获取所有公司marker
-        var marker = new AMap.Marker({
-          position: new AMap.LngLat(120.297794, 31.582888),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-          title: 'XX有限公司'
-        });
-        _this.markerArr.push(marker);
+        for(var i in _this.companyManages){
+          var company = _this.companyManages[i]
+          var marker = new AMap.Marker({
+            position: new AMap.LngLat(company.lng, company.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+            title: company.companyName
+          });
+          _this.markerArr.push(marker);
+        }
+
+
 //        map.add(marker)
 
         map.on("zoomchange",function(arg1){
@@ -250,7 +255,7 @@
 
         })
 
-//        map.setFitView()
+        map.setFitView()
         this.map = map
 
         this.polyEditor = polyEditor
@@ -350,10 +355,8 @@
 
       loadData () {
         var _this = this
-        console.log('this',this)
-        var params = {}
 
-        gridCommunityList(qs.stringify(params))
+        gridCommunityList(qs.stringify({}))
           .then(res => {
             var gridCommunitys = res.result.data
 
@@ -364,7 +367,18 @@
               }
             }
             _this.gridCommunitys = grids;
-            _this.amapView()
+
+            companyManageList(qs.stringify({}))
+              .then(res => {
+
+                _this.companyManages = res.result.data;
+                _this.amapView()
+
+              })
+              .catch(err => {
+                // Do something
+              })
+
 
           })
           .catch(err => {
