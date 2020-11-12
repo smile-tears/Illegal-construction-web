@@ -7,16 +7,25 @@
         <div>
           <div id="container" style="width: 100%;min-height:500px" :style="{height: getHeight}"></div>
 
-          <div class="input-card" style="width: 120px">
-            <button class="btn" @click="createPolygon()" style="margin-bottom: 5px">新建</button>
-            <button class="btn" @click="closePolygon()">结束编辑</button>
-            <button class="btn" @click="clearPolygon()">清除选中覆盖物</button>
-            <button class="btn" @click="getPath()">获取坐标数组</button>
+          <!--<div class="input-card" style="width: 120px">-->
+            <!--<button class="btn" @click="createPolygon()" style="margin-bottom: 5px">新建</button>-->
+            <!--<button class="btn" @click="closePolygon()">结束编辑</button>-->
+            <!--<button class="btn" @click="clearPolygon()">清除选中覆盖物</button>-->
+            <!--<button class="btn" @click="getPath()">获取坐标数组</button>-->
 
-          </div>
+          <!--</div>-->
         </div>
       </a-card>
     </a-col>
+
+    <div id="gridContainer" class="input-card" style="width: 400px">
+      <a-table :columns="columns" :data-source="gridCommunitys" :pagination="false">
+
+        <span slot="action" slot-scope="text, record">
+          <a @click="callVideo(record)">视频通话</a>
+        </span>
+      </a-table>
+    </div>
 
     <div id="amapContainer" class="input-card" style="width: 60px">
       <a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>
@@ -38,6 +47,17 @@
     right: 0rem;
     top: 0rem;
   }
+  #gridContainer{
+    position: absolute;
+    bottom: initial;
+    left: 0rem;
+    top: 0rem;
+  }
+  #gridContainer .ant-table-tbody > tr > td {
+    padding: 6px 6px;
+    overflow-wrap: break-word;
+  }
+
   .statistics_bg{
     background: deepskyblue;
     text-align: center;
@@ -56,10 +76,13 @@
   import RegisterList from './register/List'
   import { gridCommunityList } from '@/api/gridCommunity'
   import qs from 'qs'
+  import  Vue from "vue/dist/vue.esm.js"
+  import config from '@/config/defaultSettings'
+  import { STable } from '@/components'
 
   export default {
     components: {
-      RegisterList
+      RegisterList,STable
     },
     name: 'FullScreen',
     data () {
@@ -71,7 +94,37 @@
         grids:[],
         gridCommunitys:[],
         divHeight:618,
-        isFullScreen:false
+        isFullScreen:false,
+        markerArr: [],
+
+        columns : [
+          {
+            title: '网格',
+            dataIndex: 'gridName',
+            key: 'gridName',
+            width: 80
+          },
+          {
+            title: '负责人',
+            dataIndex: 'manager',
+            key: 'manager',
+            width: 120
+          },
+          {
+            title: '电话',
+            key: 'managerContactNum',
+            dataIndex: 'managerContactNum',
+            width: 120
+          },
+          {
+            title: '操作',
+            key: 'action',
+            width: 80,
+            scopedSlots: { customRender: 'action' },
+          },
+        ]
+
+
       }
     },
     computed: {
@@ -106,56 +159,12 @@
         this.divHeight =  document.body.clientHeight-200
         if(this.map)this.map.destroy()
         const map = new AMap.Map('container',{
-          zoom:13,
+          zoom:14,
 //          center:[118.76979, 32.066336]
           center:[120.299768,31.575841]
         })
 
-        if(_this.gridCommunitys.length > 0){
 
-          for(var i in _this.gridCommunitys){
-            var grid = _this.gridCommunitys[i];
-            if(grid["gridPosition"]){
-              var polygon1 = new AMap.Polygon({
-                path: JSON.parse(grid["gridPosition"])
-              })
-              map.add([polygon1])
-
-              var content =  '<div>'+grid.gridName + '</div>'
-                            + '<div><button>视频通话</button></div>';
-              var infoWindow = new AMap.InfoWindow({
-                anchor: 'top-left',
-                content:content
-              });
-              infoWindow.open(map,grid["coordinate"].split(","))
-            }
-          }
-
-//          for(var i in _this.grids){
-//            var polygon1 = new AMap.Polygon({
-//              path: _this.grids[i]
-//            })
-//            map.add([polygon1])
-//
-//            var infoWindow = new AMap.InfoWindow({
-//              anchor: 'top-left',
-//              content: '这是信息窗体！这是信息窗体！',
-//            });
-////            _this.gridCommunitys.coordinate
-//            infoWindow.open(map,[120.299768,31.575841])
-//          }
-        }else{
-          //配置编辑已有的覆盖物
-          var path1 = [[118.766614,32.074773],[118.771764,32.078118],[118.784295,32.077682],[118.783609,32.059353]]
-          var polygon1 = new AMap.Polygon({
-            path: path1
-          })
-          map.add([polygon1])
-        }
-
-
-        map.setFitView()
-        this.map = map
         var polyEditor = new AMap.PolygonEditor(map);
         //新增覆盖物
         polyEditor.on('add', function (data) {
@@ -172,14 +181,98 @@
           })
           _this.polygon = polygon
         })
-        polygon1.on('dblclick', () => {
-          _this.polygon = polygon1
-          polyEditor.setTarget(polygon1);
-          polyEditor.open();
+        var polygonArr = [];
+        if(_this.gridCommunitys.length > 0){
+
+          for(var i in _this.gridCommunitys){
+            var grid = _this.gridCommunitys[i];
+            var polygon1 = new AMap.Polygon({
+              path: JSON.parse(grid["gridPosition"])
+            })
+            polygonArr.push(polygon1)
+          }
+
+        }
+
+        for(var j in polygonArr){
+          (function (j) {
+            var polygon2 = polygonArr[j];
+            polygon2.on('click', () => {
+//              console.log(arguments);
+//              console.log('polygon2.path',polygon2.getPath( ))
+              _this.polygon = polygon2
+//              polyEditor.setTarget(polygon2);
+//              polyEditor.open();
+
+              var grid = _this.gridCommunitys[j];
+              var content =  "<div><p>" +grid.gridName + "</p>"
+                + "<p class='input-item'><a @click='callVedio(\""+grid.gridName+"\")'>视频通话</a></p>"
+                + "</div>";
+
+              let InfoContent = Vue.extend({
+                template:content,
+                methods:{
+                  callVedio(i){
+                    window.open( config.chatUrl );
+                  }
+                }
+              })
+              let component = new InfoContent().$mount()
+              var infoWindow = new AMap.InfoWindow({
+                anchor: 'top-left'
+              });
+              infoWindow.setContent(component.$el)
+              infoWindow.open(_this.map,grid["coordinate"].split(","));
+            })
+          })(j)
+        }
+        map.add(polygonArr);
+
+
+
+        //此处获取所有公司marker
+        var marker = new AMap.Marker({
+          position: new AMap.LngLat(120.297794, 31.582888),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+          title: 'XX有限公司'
+        });
+        _this.markerArr.push(marker);
+//        map.add(marker)
+
+        map.on("zoomchange",function(arg1){
+          console.log("map.getZoom():",map.getZoom());
+          if(map.getZoom() < 14){
+            map.add(polygonArr);
+            _this.hideMarker();
+          }else{
+            map.remove(polygonArr);
+            _this.showMarker();
+          }
+
         })
+
+//        map.setFitView()
+        this.map = map
 
         this.polyEditor = polyEditor
       },
+
+      callVideo(record){
+        window.open( config.chatUrl );
+      },
+
+      showMarker(){
+        for(var i in this.markerArr){
+          // 将创建的点标记添加到已有的地图实例：
+          this.map.add(this.markerArr[i]);
+        }
+      },
+      hideMarker(){
+        for(var i in this.markerArr){
+          // 将创建的点标记添加到已有的地图实例：
+          this.map.remove(this.markerArr[i]);
+        }
+      },
+
       getPath(){
         if(this.polygon){
           var arr = this.parsePath(this.polygon.getPath())
@@ -262,15 +355,15 @@
 
         gridCommunityList(qs.stringify(params))
           .then(res => {
-            _this.gridCommunitys = res.result.data
+            var gridCommunitys = res.result.data
 
-//            var grids = [];
-//            for(var i in _this.gridCommunitys){
-//              if(_this.gridCommunitys[i]["gridPosition"]){
-//                grids.push(JSON.parse(_this.gridCommunitys[i]["gridPosition"]));
-//              }
-//            }
-//            _this.grids = grids;
+            var grids = [];
+            for(var i in gridCommunitys){
+              if(gridCommunitys[i]["gridPosition"]){
+                grids.push(gridCommunitys[i]);
+              }
+            }
+            _this.gridCommunitys = grids;
             _this.amapView()
 
           })
