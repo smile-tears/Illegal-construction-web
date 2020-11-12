@@ -121,6 +121,8 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
+import qs from 'qs'
+import {userMenuTree} from '@/api/menu'
 
 export default {
   components: {
@@ -253,20 +255,21 @@ export default {
         this.stepCaptchaVisible = false
       })
     },
+    
     loginSuccess (res) {
       console.log('loginSuccess', res)
-      // check res.homePage define, set $router.push name res.homePage
-      // Why not enter onComplete
-      /*
-      this.$router.push({ name: 'analysis' }, () => {
-        console.log('onComplete')
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
+      userMenuTree(qs.stringify({userId: res.result.id})).then(response => {
+        //this.$store.commit('SET_ROUTES',menus)
+        window.sessionStorage.setItem('addRoutes',JSON.stringify(response.result))
+        window.sessionStorage.setItem('isGenerateRoutes','false')
+        this.$router.push({ path: '/firstPage' })
       })
-      */
-      this.$router.push({ path: '/' })
+      // eslint-disable-next-line handle-callback-err
+      .catch(err => {
+        // Do something
+      })
+      
+      
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({

@@ -139,6 +139,7 @@ export default {
   },
   watch: {
     page (val) {
+      debugger
       this.init()
     }
   },

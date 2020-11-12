@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import router from './router'
 import store from './store'
@@ -6,71 +7,61 @@ import NProgress from 'nprogress' // progress bar
 import '@/components/NProgress/nprogress.less' // progress bar custom style
 import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
+import { getAsyncRoutes } from '@/utils/asyncRouter'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
+//const whiteList = ['/user/login', 'register', 'registerResult'] // no redirect whitelist
 const defaultRoutePath = '/dashboard/workplace'
 
-router.beforeEach((to, from, next) => {
-  NProgress.start() // start progress bar
-  to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
-  if (Vue.ls.get(ACCESS_TOKEN)) {
-    /* has token */
-    if (to.path === '/user/login') {
-      next({ path: defaultRoutePath })
-      NProgress.done()
+const whiteList = ['/user/login'];
+router.beforeEach( async (to, from, next) => {
+    NProgress.start()
+    // 获取用户token，用来判断当前用户是否登录
+    const hasToken = Vue.ls.get(ACCESS_TOKEN)
+    if (hasToken) {
+        if (to.path === '/user/login') {
+            next()
+            NProgress.done()
+        } else {
+            //异步获取store中的路由
+            let addRoutes =  JSON.parse(window.sessionStorage.getItem('addRoutes'))
+            let isGenerateRoutes = window.sessionStorage.getItem('isGenerateRoutes')
+            var that =router
+            //debugger
+            if ( isGenerateRoutes == 'true' ) {
+                next()
+            } else {
+                try {
+                    const accessRoutes = getAsyncRoutes( addRoutes );
+                    // 动态添加格式化过的路由
+                    //debugger
+                    if(accessRoutes && accessRoutes.length > 0) {
+                      router.addRoutes(accessRoutes);
+                      window.sessionStorage.setItem('isGenerateRoutes', 'true')
+                      next({ ...to, replace: true })
+                    } else {
+                      next()
+                    }
+                    
+                } catch (error) {
+                    // Message.error('出错了')
+                    next(`/user/login?redirect=${to.path}`)
+                    NProgress.done()
+                }
+            }
+        }
     } else {
-      console.log('to:', to)
-      console.log('store.getters.userInfo:', store.getters.userInfo)
-      // const userInfo = store.getters.userInfo
-      if (store.getters.roles.length === 0) {
-        store
-          .dispatch('GetInfo')
-          .then(res => {
-            const roles = res.result && res.result.role
-            console.log('roles', roles)
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
-            // store.dispatch('GenerateRoutes', { userInfo }).then(() => {
-              // 根据roles权限生成可访问的路由表
-              // 动态添加可访问路由表
-              router.addRoutes(store.getters.addRouters)
-              // 请求带有 redirect 重定向时，登录自动重定向到该地址
-              const redirect = decodeURIComponent(from.query.redirect || to.path)
-              if (to.path === redirect) {
-                // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-                next({ ...to, replace: true })
-              } else {
-                // 跳转到目的路由
-                next({ path: redirect })
-              }
-            })
-          })
-          .catch(() => {
-            notification.error({
-              message: '错误',
-              description: '请求用户信息失败，请重试'
-            })
-            store.dispatch('Logout').then(() => {
-              next({ path: '/user/login', query: { redirect: to.fullPath } })
-            })
-          })
-      } else {
-        next()
-      }
+        if (whiteList.indexOf(to.path) !== -1) {
+            next()
+        } else {
+            next(`/user/login?redirect=${to.path}`)
+            NProgress.done()
+        }
     }
-  } else {
-    if (whiteList.includes(to.name)) {
-      // 在免登录白名单，直接进入
-      next()
-    } else {
-      next({ path: '/user/login', query: { redirect: to.fullPath } })
-      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
-    }
-  }
 })
 
 router.afterEach(() => {
-  NProgress.done() // finish progress bar
+    NProgress.done()
 })

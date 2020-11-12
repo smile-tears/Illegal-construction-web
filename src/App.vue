@@ -17,6 +17,12 @@ export default {
       locale: zhCN
     }
   },
+  created() {
+    // 通知路由守卫页面刷新，重新渲染路由信息
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.setItem('isGenerateRoutes', 'false')
+    })
+  },
   mounted () {
 
   }

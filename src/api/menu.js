@@ -1,6 +1,7 @@
 import { axios } from '@/utils/request'
 
 const api = {
+  userMenuTree: '/menu/user-tree',
   menuTree: '/menu/tree',
   menuList: '/menu/find',
   menuPost: '/menu/post',
@@ -49,6 +50,14 @@ export function roleMenuList (parameter) {
 export function menuTree (parameter) {
   return axios({
     url: api.menuTree,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function userMenuTree (parameter) {
+  return axios({
+    url: api.userMenuTree,
     method: 'post',
     data: parameter
   })

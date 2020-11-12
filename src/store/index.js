@@ -20,10 +20,16 @@ export default new Vuex.Store({
     permission
   },
   state: {
-
+    addRoutes: [],
+    isGenerateRoutes: false
   },
   mutations: {
-
+    SET_ROUTES: (state, routers) => {
+      state.addRoutes = routers
+    },
+    SET_ISGENE: (state, flag) => {
+      state.isGenerateRoutes = flag
+    }
   },
   actions: {
 
