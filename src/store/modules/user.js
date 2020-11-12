@@ -45,6 +45,8 @@ const user = {
 
           const result = response.result
           console.log(result.name, result.avatar)
+          window.sessionStorage.setItem('name',result.name)
+          window.sessionStorage.setItem('avatar',result.avatar)
           // commit('SET_NAME', { name: result.name, welcome: welcome() })
           // commit('SET_AVATAR', result.avatar)
 

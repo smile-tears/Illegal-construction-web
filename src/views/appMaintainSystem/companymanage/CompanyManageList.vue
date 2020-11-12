@@ -104,6 +104,16 @@ const columns = [
     key: 'address',
   },
   {
+    title: '经度',
+    dataIndex: 'lng',
+    key: 'lng',
+  },
+  {
+    title: '纬度',
+    dataIndex: 'lat',
+    key: 'lat',
+  },
+  {
     title: '公司法人',
     dataIndex: 'legalPerson',
     key: 'legalPerson',

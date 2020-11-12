@@ -83,22 +83,22 @@
   let map = new Map();
   let userMap = new Map();
 
-  idAndName()
-    .then(res => {
-      if (res.code === 200) {
-        res.result.data.map(item=>{map.set(item.id,item.subCompanyName)});
-      }
-    })
-    .catch(() => {
-    });
-  userIdAndName()
-    .then(res => {
-      if (res.code === 200) {
-        res.result.data.map(item=>{userMap.set(item.id,item.name)});
-      }
-    })
-    .catch(() => {
-    });
+  // idAndName()
+  //   .then(res => {
+  //     if (res.code === 200) {
+  //       res.result.data.map(item=>{map.set(item.id,item.subCompanyName)});
+  //     }
+  //   })
+  //   .catch(() => {
+  //   });
+  // userIdAndName()
+  //   .then(res => {
+  //     if (res.code === 200) {
+  //       res.result.data.map(item=>{userMap.set(item.id,item.name)});
+  //     }
+  //   })
+  //   .catch(() => {
+  //   });
 
 
 
@@ -114,11 +114,11 @@
     },
     {
       title: '责任人',
-      dataIndex: 'manager',
-      key: 'manager',
-      customRender: function (text, record, index) {
-        return userMap.get(text);
-      }
+      dataIndex: 'name',
+      key: 'name',
+      // customRender: function (text, record, index) {
+      //   return userMap.get(text);
+      // }
     },
     {
       title: '责任人联系方式',
@@ -127,11 +127,11 @@
     },
     {
       title: '责任部门',
-      dataIndex: 'managerDept',
-      key: 'managerDept',
-      customRender: function (text, record, index) {
-        return map.get(text);
-      }
+      dataIndex: 'departmentname',
+      key: 'departmentname',
+      // customRender: function (text, record, index) {
+      //   return map.get(text);
+      // }
     },
     {
       title: '网格区域编码',
@@ -157,7 +157,7 @@
       //   this.loadData()
       // });
       this.loadData()
-      this.idAndName();
+      //this.idAndName();
     },
 
     data() {

@@ -1,41 +1,68 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
+import {
+  UserLayout,
+  BasicLayout,
+  RouteView,
+  BlankLayout,
+  PageView
+} from '@/layouts'
+import {
+  bxAnaalyse
+} from '@/core/icons'
 
-export const asyncRouterMap111 = [
+export const asyncRouterMap = [
 
   {
     path: '/',
     name: 'index',
     component: BasicLayout,
-    meta: { title: '首页' },
+    meta: {
+      title: '首页'
+    },
     redirect: '/firstPage',
-    children: [
-      {
+    children: [{
         path: '/firstPage',
         name: 'FullScreen',
         component: () => import('@/views/teamWork/FullScreen2'),
-        meta: { title: '首页', icon: 'line-chart', keepAlive: false, permission: [ 'dashboard' ] }
+        meta: {
+          title: '首页',
+          icon: 'line-chart',
+          keepAlive: false,
+          permission: ['dashboard']
+        }
       },
 
       {
         path: '/appMaintainSystem',
         name: 'appMaintainSystem',
         component: PageView,
-        meta: { title: '应用维护子系统', icon: 'setting', permission: ['dashboard'] },
-        children: [
-          {
+        meta: {
+          title: '应用维护子系统',
+          icon: 'setting',
+          permission: ['dashboard']
+        },
+        children: [{
             path: '/appMaintainSystem/gridcommunity',
             name: 'gridcommunity',
             // component: () => import('../views/appMaintainSystem/GridView'),
             component: () => import('../views/appMaintainSystem/gridcommunity/GridCommunityList'),
-            meta: { title: '网格管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '网格管理',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           {
             path: '/appMaintainSystem/companyManage',
             name: 'companyManage',
             component: () => import('../views/appMaintainSystem/companymanage/CompanyManageList'),
-            meta: { title: '公司管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '公司管理',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           }
         ]
       },
@@ -44,37 +71,65 @@ export const asyncRouterMap111 = [
         path: '/baseDataSystem',
         name: 'baseDataSystem',
         component: PageView,
-        meta: { title: '基础数据子系统', icon: 'team', permission: ['dashboard'] },
-        children: [
-          {
+        meta: {
+          title: '基础数据子系统',
+          icon: 'team',
+          permission: ['dashboard']
+        },
+        children: [{
             path: '/baseDataSystem/user',
             name: 'User',
             component: () => import('@/views/appMaintainSystem/UserView'),
-            meta: { title: '用户管理', icon: 'user', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '用户管理',
+              icon: 'user',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           {
             path: '/baseDataSystem/department',
             name: 'Department',
             component: () => import('@/views/appMaintainSystem/DepartmentView'),
-            meta: { title: '部门管理', icon: 'team', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: {
+              title: '部门管理',
+              icon: 'team',
+              keepAlive: true,
+              permission: ['dashboard']
+            }
           },
           {
             path: '/baseDataSystem/role',
             name: 'role',
             component: () => import('@/views/appMaintainSystem/role/RoleList'),
-            meta: { title: '角色管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '角色管理',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           {
             path: '/baseDataSystem/menu',
             name: 'MenuView',
             component: () => import('@/views/appMaintainSystem/MenuView'),
-            meta: { title: '菜单管理', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '菜单管理',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           {
             path: '/baseDataSystem/auth',
             name: 'auth',
             component: () => import('@/views/appMaintainSystem/MenuAuthView'),
-            meta: { title: '菜单分配', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '菜单分配',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           // ,
           // {
@@ -114,16 +169,24 @@ export const asyncRouterMap111 = [
         path: '/superviseAcceptSystem',
         name: 'superviseAcceptSystem',
         component: PageView,
-        meta: { title: '监督受理子系统', icon: 'eye', permission: ['dashboard'] },
-        children: [
-          {
+        meta: {
+          title: '监督受理子系统',
+          icon: 'eye',
+          permission: ['dashboard']
+        },
+        children: [{
             path: '/superviseAcceptSystem/caseReport',
             name: 'caseReport',
             props: {
               page: '0'
             },
             component: () => import('../views/appMaintainSystem/case/ReportList'),
-            meta: { title: '案件上报', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '案件上报',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           {
             path: '/superviseAcceptSystem/caseHandle',
@@ -132,7 +195,12 @@ export const asyncRouterMap111 = [
               page: '1'
             },
             component: () => import('../views/appMaintainSystem/case/ReportList'),
-            meta: { title: '案件处置', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '案件处置',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           },
           {
             path: '/superviseAcceptSystem/caseSearch',
@@ -141,7 +209,12 @@ export const asyncRouterMap111 = [
               page: '2'
             },
             component: () => import('../views/appMaintainSystem/case/ReportList'),
-            meta: { title: '案件查询', icon: 'solution', keepAlive: true, permission: [ 'support' ] }
+            meta: {
+              title: '案件查询',
+              icon: 'solution',
+              keepAlive: true,
+              permission: ['support']
+            }
           }
           // ,
           // {
@@ -532,19 +605,32 @@ export const asyncRouterMap111 = [
         name: 'result',
         component: PageView,
         redirect: '/result/success',
-        meta: { title: '结果页', icon: 'check-circle-o', permission: [ 'result' ] },
-        children: [
-          {
+        meta: {
+          title: '结果页',
+          icon: 'check-circle-o',
+          permission: ['result']
+        },
+        children: [{
             path: '/result/success',
             name: 'ResultSuccess',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
-            meta: { title: '成功', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
+            component: () => import( /* webpackChunkName: "result" */ '@/views/result/Success'),
+            meta: {
+              title: '成功',
+              keepAlive: false,
+              hiddenHeaderContent: true,
+              permission: ['result']
+            }
           },
           {
             path: '/result/fail',
             name: 'ResultFail',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
-            meta: { title: '失败', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
+            component: () => import( /* webpackChunkName: "result" */ '@/views/result/Error'),
+            meta: {
+              title: '失败',
+              keepAlive: false,
+              hiddenHeaderContent: true,
+              permission: ['result']
+            }
           }
         ]
       },
@@ -555,25 +641,37 @@ export const asyncRouterMap111 = [
         name: 'exception',
         component: RouteView,
         redirect: '/exception/403',
-        meta: { title: '异常页', icon: 'warning', permission: [ 'exception' ] },
-        children: [
-          {
+        meta: {
+          title: '异常页',
+          icon: 'warning',
+          permission: ['exception']
+        },
+        children: [{
             path: '/exception/403',
             name: 'Exception403',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
-            meta: { title: '403', permission: [ 'exception' ] }
+            component: () => import( /* webpackChunkName: "fail" */ '@/views/exception/403'),
+            meta: {
+              title: '403',
+              permission: ['exception']
+            }
           },
           {
             path: '/exception/404',
             name: 'Exception404',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
-            meta: { title: '404', permission: [ 'exception' ] }
+            component: () => import( /* webpackChunkName: "fail" */ '@/views/exception/404'),
+            meta: {
+              title: '404',
+              permission: ['exception']
+            }
           },
           {
             path: '/exception/500',
             name: 'Exception500',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-            meta: { title: '500', permission: [ 'exception' ] }
+            component: () => import( /* webpackChunkName: "fail" */ '@/views/exception/500'),
+            meta: {
+              title: '500',
+              permission: ['exception']
+            }
           }
         ]
       }
@@ -707,7 +805,9 @@ export const asyncRouterMap111 = [
     ]
   },
   {
-    path: '*', redirect: '/404', hidden: true
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 ]
 
@@ -715,27 +815,25 @@ export const asyncRouterMap111 = [
  * 基础路由
  * @type { *[] }
  */
-export const constantRouterMap = [
-  {
+export const constantRouterMap = [{
     path: '/user',
     component: UserLayout,
     redirect: '/user/login',
     hidden: true,
-    children: [
-      {
+    children: [{
         path: 'login',
         name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
+        component: () => import( /* webpackChunkName: "user" */ '@/views/user/Login')
       },
       {
         path: 'register',
         name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
+        component: () => import( /* webpackChunkName: "user" */ '@/views/user/Register')
       },
       {
         path: 'register-result',
         name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+        component: () => import( /* webpackChunkName: "user" */ '@/views/user/RegisterResult')
       },
       {
         path: 'recover',
@@ -744,23 +842,110 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/account',
+    component: RouteView,
+    redirect: '/account/center',
+    name: 'account',
+    meta: {
+      title: '个人页',
+      icon: 'user',
+      keepAlive: true,
+      permission: ['user']
+    },
+    children: [{
+        path: '/account/center',
+        name: 'center',
+        component: () => import('@/views/account/center/Index'),
+        meta: {
+          title: '个人中心',
+          keepAlive: true,
+          permission: ['user']
+        }
+      },
+      {
+        path: '/account/settings',
+        name: 'settings',
+        component: () => import('@/views/account/settings/Index'),
+        meta: {
+          title: '个人设置',
+          hideHeader: true,
+          permission: ['user']
+        },
+        redirect: '/account/settings/base',
+        hideChildrenInMenu: true,
+        children: [{
+            path: '/account/settings/base',
+            name: 'BaseSettings',
+            component: () => import('@/views/account/settings/BaseSetting'),
+            meta: {
+              title: '基本设置',
+              hidden: true,
+              permission: ['user']
+            }
+          },
+          {
+            path: '/account/settings/security',
+            name: 'SecuritySettings',
+            component: () => import('@/views/account/settings/Security'),
+            meta: {
+              title: '安全设置',
+              hidden: true,
+              keepAlive: true,
+              permission: ['user']
+            }
+          },
+          {
+            path: '/account/settings/custom',
+            name: 'CustomSettings',
+            component: () => import('@/views/account/settings/Custom'),
+            meta: {
+              title: '个性化设置',
+              hidden: true,
+              keepAlive: true,
+              permission: ['user']
+            }
+          },
+          {
+            path: '/account/settings/binding',
+            name: 'BindingSettings',
+            component: () => import('@/views/account/settings/Binding'),
+            meta: {
+              title: '账户绑定',
+              hidden: true,
+              keepAlive: true,
+              permission: ['user']
+            }
+          },
+          {
+            path: '/account/settings/notification',
+            name: 'NotificationSettings',
+            component: () => import('@/views/account/settings/Notification'),
+            meta: {
+              title: '新消息通知',
+              hidden: true,
+              keepAlive: true,
+              permission: ['user']
+            }
+          }
+        ]
+      }
+    ]
+  },
   {
     path: '/test',
     component: BlankLayout,
     redirect: '/test/home',
-    children: [
-      {
-        path: 'home',
-        name: 'TestHome',
-        component: () => import('@/views/Home')
-      }
-    ]
+    children: [{
+      path: 'home',
+      name: 'TestHome',
+      component: () => import('@/views/Home')
+    }]
   },
 
   {
     path: '/404',
-    component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
+    component: () => import( /* webpackChunkName: "fail" */ '@/views/exception/404')
   }
 
 ]

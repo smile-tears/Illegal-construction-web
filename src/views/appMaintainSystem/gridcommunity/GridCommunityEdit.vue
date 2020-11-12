@@ -122,7 +122,7 @@
     components: { colorPicker,DrawGrid },
     props: ['modalData'],
     created() {
-      this.getGridTree();
+      //this.getGridTree();
       this.getGridDepTree();
       this.getGridDepUserTree();
     },
