@@ -22,7 +22,10 @@
       <a-table rowKey="id" :columns="columns" :data-source="gridCommunitys" :pagination="false">
 
         <span slot="action" slot-scope="text, record">
-          <a @click="callVideo(record)">视频通话</a>
+          <!--<a @click="callVideo(record)">视频通话</a>-->
+          <a-tooltip @click="callVideo(record)" title="视频通话">
+            <a-icon type="audio" />
+          </a-tooltip>
         </span>
       </a-table>
     </div>
@@ -74,7 +77,7 @@
 <script>
   //import AMap from 'AMap'
   import RegisterList from './register/List'
-  import { gridCommunityList } from '@/api/gridCommunity'
+  import { gridCommunityList, jPush } from '@/api/gridCommunity'
   import { companyManageList } from '@/api/companyManage'
   import qs from 'qs'
   import  Vue from "vue/dist/vue.esm.js"
@@ -104,22 +107,27 @@
             title: '网格',
             dataIndex: 'gridName',
             key: 'gridName',
-            width: 80
+            align:'center',
+            width: 100,
           },
           {
             title: '负责人',
             dataIndex: 'name',
             key: 'name',
+            align:'center',
+            width: 100
           },
           {
             title: '电话',
             key: 'managerContactNum',
             dataIndex: 'managerContactNum',
+            align:'center',
             width: 120
           },
           {
             title: '操作',
             key: 'action',
+            align:'center',
             width: 80,
             scopedSlots: { customRender: 'action' },
           },
@@ -205,14 +213,15 @@
 
               var grid = _this.gridCommunitys[j];
               var content =  "<div><p>" +grid.gridName + "</p>"
-                + "<p class='input-item'><a @click='callVedio(\""+grid.gridName+"\")'>视频通话</a></p>"
+                + "<p class='input-item'><a @click='callVedio(\""+grid.manager+"\")'>视频通话</a></p>"
                 + "</div>";
 
               let InfoContent = Vue.extend({
                 template:content,
                 methods:{
-                  callVedio(i){
-                    window.open( config.chatUrl );
+                  callVedio(managerId){
+                    jPush(managerId);
+                    window.open( config.chatUrl ,"chat",null ,null );
                   }
                 }
               })
@@ -261,7 +270,8 @@
       },
 
       callVideo(record){
-        window.open( config.chatUrl );
+        window.open( config.chatUrl ,"chat",null ,null );
+        jPush(record.manager);
       },
 
       showMarker(){

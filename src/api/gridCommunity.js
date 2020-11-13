@@ -6,14 +6,21 @@ const api = {
   gridCommunityDelete: '/gridCommunity/delete',
   gridCommunityPut: '/gridCommunity/put',
   gridTree: '/gridCommunity/tree',
-  idAndName:'/gridCommunity/idAndName',
-  userIdAndName:'/gridCommunity/userIdAndName',
-  checkGridName:'/gridCommunity/checkGridName',
-  getTelephone:'/gridCommunity/getTelephone',
-
+  idAndName: '/gridCommunity/idAndName',
+  userIdAndName: '/gridCommunity/userIdAndName',
+  checkGridName: '/gridCommunity/checkGridName',
+  getTelephone: '/gridCommunity/getTelephone',
+  callVideo: '/jPush/'
 }
 
 export default api
+
+export function jPush(userId) {
+  return axios({
+    url: api.callVideo + userId,
+    method: 'get'
+  })
+}
 
 export function getTelephone(parameter) {
   return axios({
