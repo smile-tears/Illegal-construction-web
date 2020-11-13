@@ -16,6 +16,7 @@
           <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
           <a-form-item>
             <a-input
+              style="height: 40px;"
               size="large"
               type="text"
               placeholder="账户"

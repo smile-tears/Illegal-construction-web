@@ -29,7 +29,7 @@
 
     <div id="amapContainer" class="input-card" style="width: 60px">
       <a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>
-      <a-icon v-else="isFullScreen" type="fullscreen-exit" :style="{ fontSize: '30px'}"  @click="exitFullScreen()"/>
+      <a-icon v-else type="fullscreen-exit" :style="{ fontSize: '30px'}"  @click="exitFullScreen()"/>
     </div>
   </a-row>
 
@@ -106,8 +106,8 @@
           },
           {
             title: '负责人',
-            dataIndex: 'manager',
-            key: 'manager',
+            dataIndex: 'name',
+            key: 'name',
             width: 120
           },
           {
