@@ -22,6 +22,20 @@
         <a-form-item label="公司法人" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['legalPerson', {}]" />
         </a-form-item>
+
+        <a-form-item label="联系方式" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input :disabled="modalData.disabled" v-decorator="['mobile', {}]" />
+        </a-form-item>
+        <a-form-item label="企业规模" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input :disabled="modalData.disabled" v-decorator="['qygm', {}]" />
+        </a-form-item>
+        <a-form-item label="分类分级" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input :disabled="modalData.disabled" v-decorator="['level', {}]" />
+        </a-form-item>
+        <a-form-item label="备注" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input :disabled="modalData.disabled" v-decorator="['remark', {}]" />
+        </a-form-item>
+        
         <a-form-item label="经度" :label-col="labelCol" :wrapper-col="wrapperCol" >
           <a-input :disabled="modalData.disabled" v-decorator="['lng', {}]" style="width: 110px" />
           <span style="margin-left: 10px">纬度：</span>

@@ -118,6 +118,27 @@ const columns = [
     dataIndex: 'legalPerson',
     key: 'legalPerson',
   },
+
+  {
+    title: '联系方式',
+    dataIndex: 'mobile',
+    key: 'mobile',
+  },
+  {
+    title: '企业规模',
+    dataIndex: 'qygm',
+    key: 'qygm',
+  },
+  {
+    title: '分类分级',
+    dataIndex: 'level',
+    key: 'level',
+  },
+  {
+    title: '备注',
+    dataIndex: 'remark',
+    key: 'remark',
+  },
   // {
   //   title: '网格',
   //   dataIndex: 'grid',
