@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :title="modalData.title"
-    :width="600"
+    :width="800"
     :visible="modalData.visible"
     :confirmLoading="confirmLoading"
     :maskClosable="false"
@@ -18,6 +18,19 @@
         </a-form-item>
         <a-form-item label="公司地址" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['address', {}]" />
+        </a-form-item>
+        <a-form-item label="安全员" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-tree-select
+            show-search
+            treeNodeFilterProp="title" 
+            :disabled="modalData.disabled"
+            v-decorator="['safetyOffice', {}]"
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="personTreeData"
+            placeholder
+            tree-default-expand-all
+          ></a-tree-select>
         </a-form-item>
         <a-form-item label="公司法人" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['legalPerson', {}]" />
@@ -36,7 +49,7 @@
           <a-input :disabled="modalData.disabled" v-decorator="['remark', {}]" />
         </a-form-item>
         
-        <a-form-item label="经度" :label-col="labelCol" :wrapper-col="wrapperCol" >
+        <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 600px;">
           <a-input :disabled="modalData.disabled" v-decorator="['lng', {}]" style="width: 110px" />
           <span style="margin-left: 10px">纬度：</span>
           <a-input :disabled="modalData.disabled" v-decorator="['lat', {}]" style="width: 110px" />
@@ -68,7 +81,7 @@
             </div>
           </a-modal>
         </a-form-item>
-        <a-form-item label="网格" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+        <a-form-item label="网格" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" v-show="true" style="width: 600px;">
           <a-select
             :disabled="modalData.disabled"
             show-search
@@ -84,8 +97,9 @@
           </a-select>
         </a-form-item>
         <a-form-item
-          :label-col="labelCol" :wrapper-col="wrapperCol"
+          :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }"
           label="附件"
+          style="width: 600px;"
         >
           <a-upload
             :disabled="modalData.disabled"
@@ -120,12 +134,14 @@
 <script>
 import { companyManagePost, companyManagePut } from '@/api/companyManage'
 import {gridCommunityList} from '@/api/gridCommunity'
+import { getSubCompanyTree, getSubCompanyUserTree } from '@/api/manage'
 const BASE_URL = process.env.NODE_ENV === 'production' ? '' : '/api'
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['modalData'],
   created() {
     this.gridList()
+    this.getSubCompanyUserTree()
   },
   data() {
     return {
@@ -139,11 +155,12 @@ export default {
         xs: { span: 24 },
         sm: { span: 16 },
       },
-      formLayout: 'horizontal',
+      formLayout: 'inline',
       confirmLoading: false,
       treeData: [],
       gridDataList: [],
-      mapVisible: false
+      mapVisible: false,
+      personTreeData: [],
     }
   },
   watch: {
@@ -322,12 +339,25 @@ export default {
         .catch(err => {
           // Do something
         })
-    }
+    },
+    getSubCompanyUserTree() {
+      getSubCompanyUserTree()
+        .then((res) => {
+          if (res.code === 200) {
+            this.personTreeData = res.result
+          }
+        })
+        .catch(() => {})
+    },
   },
 }
 </script>
 
 <style lang="less" scoped>
+/deep/ .ant-form-item {
+  width: 360px;
+}
+
 .caseDetailTitle {
   background: #f0f2f5;
   color: rgba(0, 0, 0, 0.85);

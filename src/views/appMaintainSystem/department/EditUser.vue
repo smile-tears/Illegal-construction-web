@@ -99,7 +99,7 @@
               >
                 <a-input
                   placeholder="登录账号"
-                  v-decorator="['username']"
+                  v-decorator="['username',{rules: [{ required: true, message: '请输入登录账号' }]}]"
                 ></a-input>
               </a-form-item>
             </a-col>
@@ -115,7 +115,7 @@
                 <a-input
                   :disabled="isEdit"
                   placeholder="登录密码"
-                  v-decorator="['password']"
+                  v-decorator="['password',{rules: [{ required: true, message: '请输入登录密码' }]}]"
                   type="password"
                 ></a-input>
               </a-form-item>

@@ -19,7 +19,9 @@
           ]"/>
           </a-form-item>
           <a-form-item label="责任人" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+            <!-- treeNodeFilterProp="title" show-search 实现title检索-->
             <a-tree-select
+              multiple
               :disable-branch-nodes="true"
               :disabled="modalData.disabled"
               v-decorator="['manager', {initialValue:''}]"
@@ -56,6 +58,7 @@
 
           <a-form-item style="margin-left: 40px" label="巡查人员" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
             <a-tree-select
+              multiple
               :disable-branch-nodes="true"
               :disabled="modalData.disabled"
               v-decorator="['patrolManager', {initialValue:''}]"
@@ -165,6 +168,8 @@
               }
             });
             delete this.modalData.record.visible;
+            this.modalData.record.manager = this.modalData.record.manager.split(',')
+            this.modalData.record.patrolManager = this.modalData.record.patrolManager.split(',')
             this.form.setFieldsValue({...this.modalData.record});
           });
 
@@ -207,7 +212,11 @@
             /* let index = values.manager.indexOf("（");
              values.managerContactNum=values.manager.substring(index+1,values.manager.length-1);
              values.manager = values.manager.substring(0,index);*/
-            api(values)
+            var obj = Object.assign({},values);
+            obj.manager = values.manager.join(',')
+            obj.patrolManager = values.patrolManager.join(',')
+            debugger
+            api(obj)
               .then(res => {
                 if (res.code === 200) {
                   this.$emit('handleModalEvent', res);
