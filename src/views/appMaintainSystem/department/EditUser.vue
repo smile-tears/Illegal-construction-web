@@ -99,7 +99,7 @@
               >
                 <a-input
                   placeholder="登录账号"
-                  v-decorator="['username']"
+                  v-decorator="['username',{rules: [{ required: true, message: '请输入登录账号' }]}]"
                 ></a-input>
               </a-form-item>
             </a-col>
@@ -386,7 +386,6 @@
                 hasFeedback
               >
                 <a-input
-                  placeholder="职称"
                   v-decorator="['jobtitle',{}]"
                 ></a-input>
               </a-form-item>
@@ -418,7 +417,10 @@
                 label="岗位"
                 hasFeedback
               >
-                <a-select
+                <a-input
+                  v-decorator="['post',{}]"
+                ></a-input>
+                <!-- <a-select
                   v-decorator="['post']"
                   :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
                   show-search
@@ -427,7 +429,7 @@
                   <a-select-option v-for="job in jobList" :key="job.id">
                     {{ job.jobName }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
                 <!--<a-tree-select-->
                   <!--v-decorator="['post']"-->
                   <!--style="width: 100%"-->
@@ -828,7 +830,7 @@ export default {
           this.setIdNumber(record.idNumber)
         }
         this.imageUrl = record.avatar
-        var json = pick(this.mdl, 'name', 'workcode', 'englishName', 'showOrder', 'username', 'departmentId', 'leader', 'post',
+        var json = pick(this.mdl, 'name', 'workcode', 'englishName', 'showOrder', 'username', 'departmentId', 'leader', 'post','jobtitle',
           'idNumber', 'qualification', 'telephone', 'address', 'email', 'status', 'emergencyContact', 'emergencyContactNum', 'emergencyAdreess')
         this.form.setFieldsValue(json)
       })
