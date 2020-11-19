@@ -93,13 +93,12 @@
         ],
         // 加载数据方法 必须为 Promise 对象
         loadData: parameter => {
-//          this.queryParam = Object.assign(this.queryParam, parameter)
-//          console.log('loadData.parameter', this.queryParam)
-          Object.assign(this.queryParam, parameter)
-          //if(this.$parent.$attrs.departmentId){
-//            json.departmentId = this.$parent.$attrs.departmentId
-          //}
-          return getUserList(this.queryParam)
+          var queryParam = {};
+          if(this.$parent.queryParam){
+            queryParam= JSON.parse(JSON.stringify(this.$parent.$attrs))
+          }
+          Object.assign( parameter, queryParam);
+          return getUserList(parameter)
             .then(res => {
               return res.result
             })
@@ -135,20 +134,29 @@
         this.$emit('onDetailUser',record)
       },
 
-      refresh (parameter) {
-        console.log('refresh:', parameter)
+      refresh (param) {
+        var _this = this
+        console.log('refresh:', param)
         console.log('this.queryParam:', this.queryParam)
-        this.queryParam = Object.assign(this.queryParam, parameter)
+//        this.queryParam = Object.assign(this.queryParam, parameter)
+//        Object.assign( this.queryParam,param);
+        this.queryParam = param;
 
-        console.log('refresh.parameter', this.queryParam)
+        console.log('refresh.this.queryParam', this.queryParam)
         this.loadData = parameter => {
-          return getUserList(this.queryParam)
+          Object.assign( parameter, this.queryParam);
+          return getUserList(parameter)
             .then(res => {
               return res.result
             })
         }
-        this.loadData(true)
-        this.$refs.table.refresh(true)
+//        this.$nextTick(() => {
+//        })
+        setTimeout(function () {
+          _this.loadData( Object.assign({pageNo:1, pageSize:10}, _this.queryParam) )
+          _this.$refs.table.refresh(true)
+        },1000)
+//        this.$refs.table.refresh(true)
       },
 
       onSelectChange (selectedRowKeys, selectedRows) {

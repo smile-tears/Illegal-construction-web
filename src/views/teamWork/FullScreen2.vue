@@ -1,7 +1,63 @@
 <template>
+
   <a-row id="fullContainer" :gutter="8">
 
-    <a-col :span="24">
+    <a-col :span="7">
+
+      <div>
+        <a-row :gutter="24">
+          <a-col :sm="24" :md="12" :xl="12" :style="{ marginBottom: '24px' }">
+            <chart-card :loading="loading" :hasFooter="false" :divHeight="0" title="今日上报数" :total="reportData['上报'] | NumberFormat">
+              <a-tooltip title="指标说明" slot="action">
+                <a-icon type="info-circle-o" />
+              </a-tooltip>
+              <!--<div>-->
+                <!--<span slot="term">自采案件</span>-->
+                <!--<span slot="term">{{0 | NumberFormat}}</span>-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<span slot="term">市局下派</span>-->
+                <!--<span slot="term">{{0 | NumberFormat}}</span>-->
+              <!--</div>-->
+            </chart-card>
+          </a-col>
+          <a-col :sm="24" :md="12" :xl="12" :style="{ marginBottom: '24px' }">
+            <chart-card :loading="loading" :hasFooter="false" :divHeight="0" title="今日处置数" :total="reportData['处置'] | NumberFormat">
+              <a-tooltip title="指标说明" slot="action">
+                <a-icon type="info-circle-o" />
+              </a-tooltip>
+              <!--<div>-->
+                <!--<span slot="term">自采案件</span>-->
+                <!--<span slot="term">{{0 | NumberFormat}}</span>-->
+              <!--</div>-->
+              <!--<div>-->
+                <!--<span slot="term">市局下派</span>-->
+                <!--<span slot="term">{{0 | NumberFormat}}</span>-->
+              <!--</div>-->
+            </chart-card>
+          </a-col>
+        </a-row>
+      </div>
+
+      <a-card >
+        <a-table rowKey="id" :columns="columns" :data-source="gridCommunitys" :pagination="false" :style="{height: getHeight2}">
+
+        <span slot="action" slot-scope="text, record">
+          <!--<a @click="callVideo(record)">视频通话</a>-->
+          <a-tooltip @click="callVideo(record)" title="视频通话">
+            <a-icon type="audio" />
+          </a-tooltip>
+
+          <a-tooltip @click="queryCompanyList(record)" title="公司列表" style="padding-left:10px;">
+            <a-icon type="search" />
+          </a-tooltip>
+        </span>
+        </a-table>
+      </a-card>
+    </a-col>
+
+
+    <a-col :span="17">
 
       <a-card :bordered="false">
         <div>
@@ -18,22 +74,14 @@
       </a-card>
     </a-col>
 
-    <div id="gridContainer" class="input-card" style="width: 400px">
-      <a-table rowKey="id" :columns="columns" :data-source="gridCommunitys" :pagination="false">
-
-        <span slot="action" slot-scope="text, record">
-          <!--<a @click="callVideo(record)">视频通话</a>-->
-          <a-tooltip @click="callVideo(record)" title="视频通话">
-            <a-icon type="audio" />
-          </a-tooltip>
-        </span>
-      </a-table>
-    </div>
 
     <div id="amapContainer" class="input-card" style="width: 60px">
       <a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>
       <a-icon v-else type="fullscreen-exit" :style="{ fontSize: '30px'}"  @click="exitFullScreen()"/>
     </div>
+
+
+    <CompanyListModel :modalData="modalData1"></CompanyListModel>
   </a-row>
 
 </template>
@@ -76,7 +124,10 @@
 </style>
 <script>
   //import AMap from 'AMap'
+  import { ChartCard } from '@/components'
   import RegisterList from './register/List'
+  import CompanyListModel from './CompanyListModel'
+
   import { gridCommunityList, jPush } from '@/api/gridCommunity'
   import { companyManageList } from '@/api/companyManage'
   import qs from 'qs'
@@ -86,7 +137,7 @@
 
   export default {
     components: {
-      RegisterList,STable
+      RegisterList,STable,ChartCard,CompanyListModel
     },
     name: 'FullScreen',
     data () {
@@ -101,6 +152,14 @@
         divHeight:618,
         isFullScreen:false,
         markerArr: [],
+        reportData:{
+          "上报":201,
+          "处置":392
+        },
+        loading: true,
+
+        modalData1: {},
+        modalData2: {},
 
         columns : [
           {
@@ -141,6 +200,9 @@
       // (业务需求：手机屏幕高度减去头部标题和底部tabbar的高度，当然这2个高度也是可以动态获取的)
       getHeight: function() {
         return this.divHeight + 'px';
+      },
+      getHeight2: function() {
+        return this.divHeight-128 + 'px';
       }
     },
     mounted () {
@@ -159,6 +221,9 @@
     },
     created () {
       this.loadData();
+      setTimeout(() => {
+        this.loading = !this.loading
+      }, 1000)
     },
     methods: {
       amapView () {
@@ -170,7 +235,8 @@
         const map = new AMap.Map('container',{
           zoom:14,
 //          center:[118.76979, 32.066336]
-          center:[120.299768,31.575841]
+//          center:[120.299768,31.575841]
+          center:[120.284693,31.688431]
         })
 
 
@@ -273,6 +339,15 @@
         window.open( config.chatUrl ,"chat",null ,null );
         jPush(record.manager);
       },
+      queryCompanyList(record){
+        var userId = record.userId;
+        this.modalData1 = {
+          record: {},
+          visible: true,
+          disabled: false,
+          title: '负责单位列表（'+ userId +'）'
+        }
+      },
 
       showMarker(){
         for(var i in this.markerArr){
@@ -325,7 +400,8 @@
       fullScreen() {
         var el = this.el
         this.divHeight = window.screen.height -48
-        this.isFullScreen = true
+//        this.divHeight = document.body.clientHeight
+//        this.isFullScreen = true
         var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen,
           wscript;
 
@@ -343,7 +419,8 @@
       },
       exitFullScreen() {
         var el = this.el
-        this.divHeight = 918
+//        this.divHeight = 918
+        this.divHeight = document.body.clientHeight-300
         this.isFullScreen = false
         var el= document,
           cfs = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullScreen,
