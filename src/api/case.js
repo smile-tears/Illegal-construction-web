@@ -17,7 +17,7 @@ const api = {
   // 大屏接口
   caseReport: '/caseInfoCity/report',
   caseInfoFind2: '/caseInfoCity/find2',
-  userList: '/user/find',
+  userList: '/user/user-grid',
   companyByUser: '/companyManage/find',
   userPosition: '/userPosition/recent'
 }

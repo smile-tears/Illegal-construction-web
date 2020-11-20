@@ -173,7 +173,7 @@
           <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.limittimes }}</span>
         </a-form-item>
 
-        <!-- <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
+        <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
           <a-input v-if="!modalData.view  && modalData.page == 0" v-decorator="['lng', {}]" style="width: 110px" />
           <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.lng }}</span>
           <span style="margin-left: 10px">纬度：</span>
@@ -206,7 +206,7 @@
               <a-input v-decorator="['lnglat.lat', {}]" style="width: 140px" />
             </div>
           </a-modal>
-        </a-form-item> -->
+        </a-form-item>
 
         
 
@@ -452,7 +452,6 @@ export default {
           }
 
           if (this.modalData.record.id === undefined) {
-            debugger
             this.form.setFieldsValue({
               reportor: window.sessionStorage.getItem('id'),
               ...this.modalData.record,

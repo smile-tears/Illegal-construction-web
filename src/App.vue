@@ -28,3 +28,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.ant-modal {
+  top: 65px !important;
+}
+</style>
