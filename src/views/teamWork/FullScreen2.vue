@@ -7,7 +7,7 @@
       <div>
         <a-row :gutter="24">
           <a-col :sm="24" :md="12" :xl="12" :style="{ marginBottom: '24px' }">
-            <chart-card :loading="loading" :hasFooter="false" :divHeight="0" title="今日上报数" :total="reportData['上报'] | NumberFormat">
+            <chart-card :loading="loading" :hasFooter="false" :divHeight="0" title="今日上报数" :total="reportData['今日上报数'] | NumberFormat">
               <a-tooltip title="指标说明" slot="action">
                 <a-icon type="info-circle-o" />
               </a-tooltip>
@@ -22,7 +22,7 @@
             </chart-card>
           </a-col>
           <a-col :sm="24" :md="12" :xl="12" :style="{ marginBottom: '24px' }">
-            <chart-card :loading="loading" :hasFooter="false" :divHeight="0" title="今日处置数" :total="reportData['处置'] | NumberFormat">
+            <chart-card :loading="loading" :hasFooter="false" :divHeight="0" title="今日处置数" :total="reportData['今日处置数'] | NumberFormat">
               <a-tooltip title="指标说明" slot="action">
                 <a-icon type="info-circle-o" />
               </a-tooltip>
@@ -40,7 +40,15 @@
       </div>
 
       <a-card >
-        <a-table rowKey="id" :columns="columns" :data-source="gridCommunitys" :pagination="false" :style="{height: getHeight2}">
+        <a-table rowKey="id" :columns="columns" :data-source="userListData"
+                 :style="{height: getHeight2}"
+                 :pagination="{
+                    current: pagination.current,
+                    pageSize: pagination.pageSize,
+                    total: pagination.total,
+                    'show-size-changer': true
+                  }"
+                 @change="change">
 
         <span slot="action" slot-scope="text, record">
           <!--<a @click="callVideo(record)">视频通话</a>-->
@@ -75,9 +83,20 @@
     </a-col>
 
 
-    <div id="amapContainer" class="input-card" style="width: 60px">
-      <a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>
-      <a-icon v-else type="fullscreen-exit" :style="{ fontSize: '30px'}"  @click="exitFullScreen()"/>
+    <div id="amapContainer" class="input-card" style="width: 130px">
+      <div class="input-item">
+        <input type="button" class="btn" value="开启未处置案件" :hidden="!showUndealCase" id="startUnDealCase" @click="loadUndealCase()"/>
+        <input type="button" class="btn" value="关闭未处置案件" :hidden="showUndealCase" id="stopUnDealCase" @click="closeUndealCase()"/>
+      </div>
+      <div class="input-item">
+        <input type="button" class="btn" value="开启人员点聚合" :hidden="!showPerson" id="startPerson" @click="loadUserPosition()"/>
+        <input type="button" class="btn" value="关闭人员点聚合" :hidden="showPerson" id="stopPerson" @click="closeUserPosition()"/>
+      </div>
+      <div class="input-item">
+        <input type="button" class="btn" value="人员轨迹" id="personHis" @click="pauseAnimation()"/>
+      </div>
+      <!--<a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>-->
+      <!--<a-icon v-else type="fullscreen-exit" :style="{ fontSize: '30px'}"  @click="exitFullScreen()"/>-->
     </div>
 
 
@@ -98,6 +117,10 @@
     right: 0rem;
     top: 0rem;
   }
+  #amapContainer > .input-item > .btn{
+    margin:auto;
+  }
+
   #gridContainer{
     position: absolute;
     bottom: initial;
@@ -129,7 +152,7 @@
   import CompanyListModel from './CompanyListModel'
 
   import { gridCommunityList, jPush } from '@/api/gridCommunity'
-  import { companyManageList } from '@/api/companyManage'
+  import { caseReport,caseInfoFind2,userList,userPosition,companyByUser } from '@/api/case'
   import qs from 'qs'
   import  Vue from "vue/dist/vue.esm.js"
   import config from '@/config/defaultSettings'
@@ -147,15 +170,33 @@
         polyEditor:null,
         polygon:null,
         grids:[],
-        gridCommunitys:[],
-        companyManages:[],
-        divHeight:618,
+//        gridCommunitys:[],
+//        companyManages:[],
+        divHeight:787,
         isFullScreen:false,
         markerArr: [],
         reportData:{
-          "上报":201,
-          "处置":392
+          "今日上报数": 0,
+          "今日待处置数": 0,
+          "今日处置数": 0
         },
+
+        infoWindow: null,
+        undealCase:[],//未处置事件
+        unDealPoint:[],
+        showUndealCase: true,
+        unDealCluster: null,
+        userPositions:[],//当前人员点位
+        showPerson: true,
+        personCluster: null,
+
+        userListData:[],
+        pagination: {
+          current: 1,
+          pageSize: 10,
+          total: 0
+        },
+
         loading: true,
 
         modalData1: {},
@@ -178,8 +219,8 @@
           },
           {
             title: '电话',
-            key: 'managerContactNum',
-            dataIndex: 'managerContactNum',
+            key: 'telephone',
+            dataIndex: 'telephone',
             align:'center',
             width: 120
           },
@@ -191,8 +232,6 @@
             scopedSlots: { customRender: 'action' },
           },
         ]
-
-
       }
     },
     computed: {
@@ -202,7 +241,7 @@
         return this.divHeight + 'px';
       },
       getHeight2: function() {
-        return this.divHeight-128 + 'px';
+        return this.divHeight-135 + 'px';
       }
     },
     mounted () {
@@ -221,16 +260,20 @@
     },
     created () {
       this.loadData();
+      this.loadUser();
+      this.loadCaseReport();
       setTimeout(() => {
         this.loading = !this.loading
-      }, 1000)
+      }, 100)
     },
     methods: {
       amapView () {
         var _this = this
 
         this.el = document.getElementById('fullContainer')
-        this.divHeight =  document.body.clientHeight-200
+//        this.divHeight =  document.body.clientHeight-200
+
+//        this.divHeight = 780;
         if(this.map)this.map.destroy()
         const map = new AMap.Map('container',{
           zoom:14,
@@ -239,237 +282,298 @@
           center:[120.284693,31.688431]
         })
 
-
-        var polyEditor = new AMap.PolygonEditor(map);
-        //新增覆盖物
-        polyEditor.on('add', function (data) {
-          console.log(data);
-          var polygon = data.target;
-          polyEditor.addAdsorbPolygons(polygon);
-          polygon.on('dblclick', () => {
-            //获取坐标
-            console.log('polygon.path',polygon.getPath( ))
-            console.log(JSON.stringify(_this.parsePath(polygon.getPath())))
-            _this.polygon = polygon
-            polyEditor.setTarget(polygon);
-            polyEditor.open();
-          })
-          _this.polygon = polygon
-        })
-        var polygonArr = [];
-        if(_this.gridCommunitys.length > 0){
-
-          for(var i in _this.gridCommunitys){
-            var grid = _this.gridCommunitys[i];
-            var polygon1 = new AMap.Polygon({
-              path: JSON.parse(grid["gridPosition"])
-            })
-            polygonArr.push(polygon1)
-          }
-
-        }
-
-        for(var j in polygonArr){
-          (function (j) {
-            var polygon2 = polygonArr[j];
-            polygon2.on('click', () => {
-              _this.polygon = polygon2
-//              polyEditor.setTarget(polygon2);
-//              polyEditor.open();
-
-              var grid = _this.gridCommunitys[j];
-              var content =  "<div><p>" +grid.gridName + "</p>"
-                + "<p class='input-item'><a @click='callVedio(\""+grid.manager+"\")'>视频通话</a></p>"
-                + "</div>";
-
-              let InfoContent = Vue.extend({
-                template:content,
-                methods:{
-                  callVedio(managerId){
-                    jPush(managerId);
-                    window.open( config.chatUrl ,"chat",null ,null );
-                  }
-                }
-              })
-              let component = new InfoContent().$mount()
-              var infoWindow = new AMap.InfoWindow({
-                anchor: 'top-left'
-              });
-              infoWindow.setContent(component.$el)
-              infoWindow.open(_this.map,grid["coordinate"].split(","));
-            })
-          })(j)
-        }
-        map.add(polygonArr);
-
-
-
-        //此处获取所有公司marker
-        for(var i in _this.companyManages){
-          var company = _this.companyManages[i]
-          var marker = new AMap.Marker({
-            position: new AMap.LngLat(company.lng, company.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-            title: company.companyName
-          });
-          _this.markerArr.push(marker);
-        }
-
-
-//        map.add(marker)
-
-        map.on("zoomchange",function(arg1){
-          console.log("map.getZoom():",map.getZoom());
-          if(map.getZoom() < 14){
-            map.add(polygonArr);
-            _this.hideMarker();
-          }else{
-            map.remove(polygonArr);
-            _this.showMarker();
-          }
-
-        })
-
-        map.setFitView()
+//        map.setFitView()
         this.map = map
 
-        this.polyEditor = polyEditor
+//        this.loadUndealCase();
+//        this.polyEditor = polyEditor
       },
 
       callVideo(record){
         window.open( config.chatUrl ,"chat",null ,null );
-        jPush(record.manager);
+        jPush(record.id);
       },
       queryCompanyList(record){
-        var userId = record.userId;
+        var _this = this;
+        var userId = record.id;
+
         this.modalData1 = {
-          record: {},
+          record: {safetyOffice:userId},
           visible: true,
           disabled: false,
-          title: '负责单位列表（'+ userId +'）'
-        }
-      },
-
-      showMarker(){
-        for(var i in this.markerArr){
-          // 将创建的点标记添加到已有的地图实例：
-          this.map.add(this.markerArr[i]);
-        }
-      },
-      hideMarker(){
-        for(var i in this.markerArr){
-          // 将创建的点标记添加到已有的地图实例：
-          this.map.remove(this.markerArr[i]);
-        }
-      },
-
-      getPath(){
-        if(this.polygon){
-          var arr = this.parsePath(this.polygon.getPath())
-          console.log('path:'+JSON.stringify(arr))
-        }else{
-          console.log("没有选中的多边形")
-        }
-      },
-      parsePath (path) {
-        var arr = []
-        path.forEach(function (item) {
-          arr.push([item.lng,item.lat])
-        })
-        return arr
-      },
-      createPolygon () {
-        const polyEditor = this.polyEditor
-        polyEditor.close();
-        polyEditor.setTarget();
-        polyEditor.open();
-      },
-      clearPolygon () {
-        if(this.polygon){
-          this.polyEditor.removeAdsorbPolygons(this.polygon)
-          this.polyEditor.close()
-          this.map.remove([this.polygon])
-        }else{
-          console.log("没有选中的多边形")
-        }
-      },
-      closePolygon () {
-        this.polyEditor.close()
-      },
-
-//      地图全屏
-      fullScreen() {
-        var el = this.el
-        this.divHeight = window.screen.height -48
-//        this.divHeight = document.body.clientHeight
-//        this.isFullScreen = true
-        var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen,
-          wscript;
-
-        if(typeof rfs != "undefined" && rfs) {
-          rfs.call(el);
-          return;
-        }
-
-        if(typeof window.ActiveXObject != "undefined") {
-          wscript = new ActiveXObject("WScript.Shell");
-          if(wscript) {
-            wscript.SendKeys("{F11}");
-          }
-        }
-      },
-      exitFullScreen() {
-        var el = this.el
-//        this.divHeight = 918
-        this.divHeight = document.body.clientHeight-300
-        this.isFullScreen = false
-        var el= document,
-          cfs = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullScreen,
-          wscript;
-
-        if (typeof cfs != "undefined" && cfs) {
-          cfs.call(el);
-          return;
-        }
-
-        if (typeof window.ActiveXObject != "undefined") {
-          wscript = new ActiveXObject("WScript.Shell");
-          if (wscript != null) {
-            wscript.SendKeys("{F11}");
-          }
+          title: '负责单位列表（'+ record.username +'）'
         }
       },
 
       loadData () {
         var _this = this
 
-        gridCommunityList(qs.stringify({}))
-          .then(res => {
-            var gridCommunitys = res.result.data
+        var info = [];
+//        info.push("<div class='input-card content-window-card'><div><img style=\"float:left;width:67px;height:16px;\" src=\" https://webapi.amap.com/images/autonavi.png \"/></div> ");
+//        info.push("<div style=\"padding:7px 0px 0px 0px;\"><h4>高德软件</h4>");
+//        info.push("<p class='input-item'>电话 : 010-84107000   邮编 : 100102</p>");
+//        info.push("<p class='input-item'>地址 :北京市朝阳区望京阜荣街10号首开广场4层</p></div></div>");
+        var infoWindow = new AMap.InfoWindow({
+          content: info.join("")  //使用默认信息窗体框样式，显示信息内容
+        });
+        _this.infoWindow = infoWindow;
 
-            var grids = [];
-            for(var i in gridCommunitys){
-              if(gridCommunitys[i]["gridPosition"]){
-                grids.push(gridCommunitys[i]);
+        setTimeout(function () {
+          _this.amapView();
+        },100)
+
+      },
+
+      _renderClusterMarker: function (context) {
+        var count = this.unDealPoint.length;
+        var factor = Math.pow(context.count / count, 1 / 18);
+        var div = document.createElement('div');
+        var Hue = 180 - factor * 180;
+        var bgColor = 'hsla(' + Hue + ',100%,40%,0.7)';
+        var fontColor = 'hsla(' + Hue + ',100%,90%,1)';
+        var borderColor = 'hsla(' + Hue + ',100%,40%,1)';
+        var shadowColor = 'hsla(' + Hue + ',100%,90%,1)';
+        div.style.backgroundColor = bgColor;
+        var size = Math.round(30 + Math.pow(context.count / count, 1 / 5) * 20);
+        div.style.width = div.style.height = size + 'px';
+        div.style.border = 'solid 1px ' + borderColor;
+        div.style.borderRadius = size / 2 + 'px';
+        div.style.boxShadow = '0 0 5px ' + shadowColor;
+        div.innerHTML = context.count;
+        div.style.lineHeight = size + 'px';
+        div.style.color = fontColor;
+        div.style.fontSize = '14px';
+        div.style.textAlign = 'center';
+        context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+        context.marker.setContent(div)
+      },
+      _renderMarker2: function(context) {
+        var _this = this;
+        var map = this.map;
+        var content = '<div style="background-color: hsla(180, 100%, 50%, 0.3); height: 18px; width: 18px; border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 3px;"></div>';
+        var offset = new AMap.Pixel(-9, -9);
+        var data= context.data[0];
+        context.marker.setContent(content)
+        context.marker.setOffset(offset)
+        context.marker.on('click', function(e) {
+          console.log('e:',e);
+
+          var infoWindow = _this.infoWindow;
+          var info = [];
+          info.push("<div style=\"padding:7px 0px 0px 0px;\"><h4>人员（"+ data.name+"）</h4>");
+          info.push("<a class='btn' @click='callVedio(\""+data.userid+"\")'>视频通话</a>");
+          info.push("</div>");
+
+          let InfoContent = Vue.extend({
+            template:info.join(""),
+            methods:{
+              callVedio(managerId){
+                jPush(managerId);
+                window.open( config.chatUrl ,"chat",null ,null );
               }
             }
-            _this.gridCommunitys = grids;
+          })
+          let component = new InfoContent().$mount()
 
-            companyManageList(qs.stringify({}))
-              .then(res => {
+          infoWindow.setContent(component.$el);
+          infoWindow.open(
+            map,
+            context.marker.getPosition(data.lnt, data.lat)// 窗口信息的位置
+          );
+        });
+      },
 
-                _this.companyManages = res.result.data;
-                _this.amapView()
+      //未处置事件marker
+      _renderMarker: function(context) {
+        var _this = this;
+        var map = this.map;
+        var content = '<div style="background-color: hsla(348,100%,62%,0.3); height: 18px; width: 18px; border: 1px solid hsl(357,67%,48%); border-radius: 12px; box-shadow: hsl(351,100%,67%) 0px 0px 3px;"></div>';
+        var offset = new AMap.Pixel(-9, -9);
+        var data= context.data[0];
+        context.marker.setContent(content)
+        context.marker.setOffset(offset)
+        context.marker.on('click', function(e) {
 
-              })
-              .catch(err => {
-                // Do something
-              })
+          var infoWindow = _this.infoWindow;
+          var info = [];
+          info.push("<div style=\"padding:7px 0px 0px 0px;\"><h4>未处置事件（"+ data.title+"）</h4>");
+          info.push("<p class='input-item'>"+ data.reportorName + "   "+ data.reportorMobile + "<a class='btn' @click='callVedio(\""+data.reportor+"\")'>视频通话</a>" + "</p>");
+          info.push("<p class='input-item'>"+ data.managerName + "   "+ data.managerMobile +"</p>");
 
+          let InfoContent = Vue.extend({
+            template:info.join(""),
+            methods:{
+              callVedio(managerId){
+                jPush(managerId);
+                window.open( config.chatUrl ,"chat",null ,null );
+              }
+            }
+          })
+          let component = new InfoContent().$mount()
 
+          infoWindow.setContent(component.$el);
+          infoWindow.open(
+            map,
+            context.marker.getPosition(data.lnt, data.lat)// 窗口信息的位置
+          );
+
+        });
+      },
+
+      loadCaseReport() {
+        caseReport()
+          .then(res => {
+            if (res.code === 200) {
+              this.reportData = res.result;
+            }
           })
           .catch(err => {
             // Do something
           })
+      },
+
+
+
+      closeUndealCase(){
+        this.showUndealCase = true
+        if(this.unDealCluster){
+          this.unDealCluster.setMap(null);
+          this.unDealCluster = null;
+        }
+      },
+      loadUndealCase(){
+        var _this = this;
+        _this.showUndealCase = false
+        const gridSize = 60
+        caseInfoFind2(qs.stringify({status:1}))
+          .then(res => {
+            if (res.code === 200) {
+              _this.undealCase = res.result.data;
+              var points = [],markers=[];
+
+              for(var i in _this.undealCase){
+                var point = JSON.parse(JSON.stringify(_this.undealCase[i]));
+                if(point.lng && point.lat){
+                  point["weight"] = 1;
+                  point["lnglat"] = [point.lng,point.lat];
+                  points.push(point);
+                }
+              }
+
+              _this.unDealPoint = points;
+
+              var cluster;
+              var map = _this.map;
+              //添加聚合组件
+              cluster = new AMap.MarkerClusterer(map, points, {
+                gridSize: gridSize,
+                renderClusterMarker: _this._renderClusterMarker, // 自定义聚合点样式
+                renderMarker: _this._renderMarker // 自定义非聚合点样式
+              });
+              _this.unDealCluster = cluster;
+//              map.setFitView();
+
+            }
+          })
+          .catch(err => {
+            // Do something
+          })
+      },
+
+      closeUserPosition(){
+        this.showPerson = true
+        if(this.personCluster){
+          this.personCluster.setMap(null);
+          this.personCluster = null;
+        }
+      },
+
+      loadUserPosition() {
+
+        var _this = this;
+        _this.showPerson = false
+        const gridSize = 60
+
+        var styles = [{
+          url: "https://a.amap.com/jsapi_demos/static/images/blue.png",
+          size: new AMap.Size(32, 32),
+          offset: new AMap.Pixel(-16, -16)
+        }, {
+          url: "https://a.amap.com/jsapi_demos/static/images/green.png",
+          size: new AMap.Size(32, 32),
+          offset: new AMap.Pixel(-16, -16)
+        }, {
+          url: "https://a.amap.com/jsapi_demos/static/images/orange.png",
+          size: new AMap.Size(36, 36),
+          offset: new AMap.Pixel(-18, -18)
+        }, {
+          url: "https://a.amap.com/jsapi_demos/static/images/red.png",
+          size: new AMap.Size(48, 48),
+          offset: new AMap.Pixel(-24, -24)
+        }, {
+          url: "https://a.amap.com/jsapi_demos/static/images/darkRed.png",
+          size: new AMap.Size(48, 48),
+          offset: new AMap.Pixel(-24, -24)
+        }];
+
+        userPosition(qs.stringify({}))
+          .then(res => {
+            if (res.code === 200) {
+              _this.userPositions = res.result;
+              var points = [];
+
+              for(var i in _this.userPositions){
+                var point = JSON.parse(JSON.stringify(_this.userPositions[i]));
+                if(point.lng && point.lat){
+                  point["weight"] = 1;
+                  point["lnglat"] = [point.lng,point.lat];
+                  points.push(point);
+                }
+              }
+
+              var cluster;
+              var map = _this.map;
+              //添加聚合组件
+              cluster = new AMap.MarkerClusterer(
+                map,     // 地图实例
+                points, // 海量点数据，数据中需包含经纬度信息字段 lnglat
+                {
+                  gridSize: gridSize, // 设置网格像素大小
+                  styles: styles,
+                  renderMarker: _this._renderMarker2
+              });
+              _this.personCluster = cluster;
+
+            }
+          })
+          .catch(err => {
+            // Do something
+          })
+      },
+
+      loadUser() {
+        var params = {
+          // pid: this.GridNode.value,
+          pageNo: this.pagination.current,
+          pageSize: this.pagination.pageSize
+        };
+
+        //获取用户列表
+        userList(qs.stringify({}))
+          .then(res => {
+            if (res.code === 200) {
+              this.userListData = res.result.data;
+              this.pagination.total = res.result.totalCount
+            }
+          })
+          .catch(err => {
+            // Do something
+          })
+
+      },
+      change(pagination, filters, sorter) {
+        this.pagination = pagination
+        this.loadUser()
       }
     }
   }

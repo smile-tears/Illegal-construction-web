@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :title="modalData.title"
-    :width="600"
+    :width="800"
     :visible="modalData.visible"
     :footer="null"
     :maskClosable="false"
@@ -9,7 +9,6 @@
     class="modal"
   >
       <a-table
-        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         :columns="columns"
         :data-source="data"
         rowKey="id"
@@ -17,36 +16,41 @@
           current: pagination.current,
           pageSize: pagination.pageSize,
           total: pagination.total,
-          'show-size-changer': true,
-          'show-quick-jumper': true,
-          'show-total': total => `共 ${total} 条`
+          'show-size-changer': true
         }"
         @change="change"
       >
       </a-table>
-      <div slot="tabBarExtraContent" class="btn-container">
-        <a-button type="primary" v-show="key == 1" @click="handleOk">保存</a-button>
-        <a-button type="primary" v-show="key == 2" @click="addUser">新建</a-button>
-        <a-button type="danger" v-show="key == 2" @click="delUser">批量删除</a-button>
-      </div>
 
   </a-modal>
 </template>
 
 <script>
-  import { rolePost, rolePut, userRolePost, userRoleDelete, userRoleList } from '@/api/role'
-  import { getSubCompanyUserTree } from '@/api/manage'
+//  import { rolePost, rolePut, userRolePost, userRoleDelete, userRoleList } from '@/api/role'
+//  import { getSubCompanyUserTree } from '@/api/manage'
+
+  import { companyByUser } from '@/api/case'
   import qs from 'qs'
   const columns = [
     {
-      title: '用户名',
-      dataIndex: 'name',
-      key: 'name'
+      title: '公司名',
+      dataIndex: 'companyName',
+      key: 'companyName'
     },
     {
-      title: '登录账号',
-      dataIndex: 'username',
-      key: 'username'
+      title: '地址',
+      dataIndex: 'address',
+      key: 'address'
+    },
+    {
+      title: '法人',
+      dataIndex: 'legalPerson',
+      key: 'legalPerson'
+    },
+    {
+      title: '联系电话',
+      dataIndex: 'mobile',
+      key: 'mobile'
     }
   ]
   export default {
@@ -66,7 +70,6 @@
         key: 1,
         data: [],
         columns: columns,
-        selectedRowKeys: [],
         pagination: {
           current: 1,
           pageSize: 10,
@@ -79,13 +82,13 @@
     },
     watch: {
       modalData (modalData) {
-        this.form.resetFields()
+//        this.form.resetFields()
         if (modalData.visible === true) {
-          this.$nextTick(() => {
-            delete this.modalData.record.delTag
-            this.form.setFieldsValue({ ...this.modalData.record })
-          })
-          this.loadUserList()
+//          this.$nextTick(() => {
+//            delete this.modalData.record.delTag
+//            this.form.setFieldsValue({ ...this.modalData.record })
+//          })
+          this.loadCompanyList()
         }
       }
     },
@@ -94,105 +97,31 @@
       // console.log('form::', this.form)
     },
     methods: {
-      handleOk () {
-        // 触发表单验证
-        this.form.validateFields((err, values) => {
-          // 验证表单没错误
-          if (!err) {
-            // console.log('form values', values)
-            var api = values.id === undefined ? rolePost : rolePut
-            api(values)
-              .then(res => {
-                this.$emit('handleModalEvent', res)
-                this.handleCancel()
-              })
-              .catch(() => {})
-          }
-        })
-      },
-      handleOk2 () {
-        var roleId = this.modalData.record.id
-        var params = []
-        this.value.forEach(element => {
-          params.push({
-            roleId: roleId,
-            userId: element
-          })
-        })
-        userRolePost(params)
-          .then(res => {
-            if (res.code === 200) {
-              this.handleCancel2()
-              this.loadUserList()
-            }
-          })
-          .catch(() => {})
-      },
-      addUser () {
-        this.visible2 = true
-      },
-      delUser () {
-        userRoleDelete(this.selectedRowKeys)
-          .then(res => {
-            if (res.code === 200) {
-              this.loadUserList()
-            }
-          })
-          .catch(() => {})
-      },
-      handleCancel () {
-        this.modalData.visible = false
-      },
-      handleCancel2 () {
-        this.visible2 = false
-      },
-      handleTabChange (key) {
-        this.key = key
-        if (key == '2' && this.treeData == null) {
-          getSubCompanyUserTree()
-            .then(res => {
-              if (res.code === 200) {
-                this.recursionUserTree(res.result)
-                this.treeData = res.result
-              }
-            })
-            .catch(() => {
-              // Do something
-            })
-        }
-      },
-      loadUserList () {
+      loadCompanyList () {
+        var record = JSON.parse(JSON.stringify(this.modalData.record))
+
         var param = {
           pageNo: this.pagination.current,
           pageSize: this.pagination.pageSize,
-          roleId: this.modalData.record.id
+          safetyOffice: record.safetyOffice
         }
-        userRoleList(qs.stringify(param))
+        companyByUser(qs.stringify(param))
           .then(res => {
             if (res.code === 200) {
               this.data = res.result.data
+              this.pagination.total = res.result.totalCount
             }
           })
           .catch(() => {
             // Do something
           })
       },
-      recursionUserTree (data) {
-        data.forEach(element => {
-          if (element.type != 'user') element.disabled = true
-          if (element.children && element.children.length > 0) this.recursionUserTree(element.children)
-        })
-      },
-      onSelectChange (selectedRowKeys) {
-        // console.log('selectedRowKeys changed: ', selectedRowKeys);
-        this.selectedRowKeys = selectedRowKeys
-      },
       change (pagination, filters, sorter) {
-        this.pagination = pagination
-        // this.loadData()
+        this.pagination = pagination;
+        this.loadCompanyList()
       },
-      onChange (value) {
-        this.value = value
+      handleCancel() {
+        this.modalData.visible = false
       }
     }
   }

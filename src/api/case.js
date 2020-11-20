@@ -12,8 +12,14 @@ const api = {
 
   caseInfoRequestLogCityPost: '/caseInfoRequestLogCity/post',
   caseInfoRequestLogCityPut: '/caseInfoRequestLogCity/put',
-  caseInfoRequestLogCityList: '/caseInfoRequestLogCity/find'
+  caseInfoRequestLogCityList: '/caseInfoRequestLogCity/find',
 
+  // 大屏接口
+  caseReport: '/caseInfoCity/report',
+  caseInfoFind2: '/caseInfoCity/find2',
+  userList: '/user/find',
+  companyByUser: '/companyManage/find',
+  userPosition: '/userPosition/recent'
 }
 
 export default api
@@ -56,7 +62,7 @@ export function caseInfoCityList (parameter) {
   })
 }
 
-export function caseInfoCityList2(parameter) {
+export function caseInfoCityList2 (parameter) {
   return axios({
     url: api.caseInfoCityList2,
     method: 'post',
@@ -64,7 +70,7 @@ export function caseInfoCityList2(parameter) {
   })
 }
 
-export function caseInfoCityPost(parameter) {
+export function caseInfoCityPost (parameter) {
   return axios({
     url: api.caseInfoCityPost,
     method: 'post',
@@ -72,7 +78,7 @@ export function caseInfoCityPost(parameter) {
   })
 }
 
-export function caseInfoCityDelete(parameter) {
+export function caseInfoCityDelete (parameter) {
   return axios({
     url: api.caseInfoCityDelete,
     method: 'post',
@@ -80,7 +86,7 @@ export function caseInfoCityDelete(parameter) {
   })
 }
 
-export function caseInfoCityPut(parameter) {
+export function caseInfoCityPut (parameter) {
   return axios({
     url: api.caseInfoCityPut,
     method: 'post',
@@ -99,6 +105,43 @@ export function caseInfoFileCityDelete (parameter) {
 export function caseReportData (parameter) {
   return axios({
     url: api.caseReportData,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function caseReport (parameter) {
+  return axios({
+    url: api.caseReport,
+    method: 'post',
+    data: parameter
+  })
+}
+export function caseInfoFind2 (parameter) {
+  return axios({
+    url: api.caseInfoFind2,
+    method: 'post',
+    data: parameter
+  })
+}
+export function userList (parameter) {
+  return axios({
+    url: api.userList,
+    method: 'post',
+    data: parameter
+  })
+}
+export function companyByUser (parameter) {
+  return axios({
+    url: api.companyByUser,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function userPosition (parameter) {
+  return axios({
+    url: api.userPosition,
     method: 'post',
     data: parameter
   })
