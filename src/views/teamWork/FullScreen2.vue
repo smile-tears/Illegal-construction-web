@@ -332,8 +332,25 @@ export default {
     },
 
     callVideo(record) {
-      window.open(config.chatUrl, 'chat', null, null)
-      jPush(record.id)
+      
+      
+      var result = this.pushMobile(record.id)
+      if (result == 0) {
+        window.open(config.chatUrl, 'chat', null, null)
+      }
+    },
+    pushMobile(id) {
+      jPush(id)
+        .then((res) => {
+          if (res.result != '0') {
+            this.$message.error('推送手机消息失败，错误信息：'+res.result);
+          } else {
+            this.$message.success('推送手机消息成功');
+            return 0;
+          }
+        })
+        .catch(() => {})
+      return 1
     },
     queryCompanyList(record) {
       var _this = this
@@ -410,7 +427,7 @@ export default {
           template: info.join(''),
           methods: {
             callVedio(managerId) {
-              jPush(managerId)
+              this.pushMobile(managerId)
               window.open(config.chatUrl, 'chat', null, null)
             },
           },
@@ -455,7 +472,7 @@ export default {
           template: info.join(''),
           methods: {
             callVedio(managerId) {
-              jPush(managerId)
+              this.pushMobile(managerId)
               window.open(config.chatUrl, 'chat', null, null)
             },
           },

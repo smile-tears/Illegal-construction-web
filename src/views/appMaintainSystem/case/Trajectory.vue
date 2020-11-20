@@ -70,7 +70,10 @@ export default {
   props: ['modalData'],
   data() {
     return {
-      queryParam: {},
+      queryParam: {
+        startTime: this.dateFormat(new Date()) + ' 09:00',
+        endTime: this.dateFormat(new Date()) + ' 18:00'
+      },
       personTreeData: [],
       positions: [],
       startTime2: moment(this.dateFormat(new Date()) + ' 09:00', 'yyyy-MM-dd HH:mm'),
@@ -143,7 +146,7 @@ export default {
       var that = this
       //创建地图
       var map = new AMap.Map('containerTrace', {
-        zoom: 25,
+        zoom: 15,
       })
       AMapUI.load(['ui/misc/PathSimplifier', 'lib/$'], function (PathSimplifier, $) {
         if (!PathSimplifier.supportCanvas) {
