@@ -259,6 +259,7 @@ export default {
     
     loginSuccess (res) {
       console.log('loginSuccess', res)
+      window.sessionStorage.setItem('id', res.result.id)
       userMenuTree(qs.stringify({userId: res.result.id})).then(response => {
         //this.$store.commit('SET_ROUTES',menus)
         window.sessionStorage.setItem('addRoutes',JSON.stringify(response.result))

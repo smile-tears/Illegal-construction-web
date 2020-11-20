@@ -95,8 +95,8 @@ const columns = [
   },
   {
     title: '上报人',
-    dataIndex: 'name',
-    key: 'name'
+    dataIndex: 'reportorName',
+    key: 'reportorName'
   },
   {
     title: '处置时限',
@@ -114,7 +114,7 @@ const columns = [
     key: 'caseDesc'
   },
   {
-    title: '位置描述',
+    title: '地址',
     dataIndex: 'locationDesc',
     key: 'locationDesc'
   },
@@ -139,7 +139,6 @@ export default {
   },
   watch: {
     page (val) {
-      debugger
       this.init()
     }
   },
@@ -169,9 +168,11 @@ export default {
       var params = {
         pageNo: this.pagination.current,
         pageSize: this.pagination.pageSize,
-        pageSource: this.page,
+        status: this.page,
+        reportor: window.sessionStorage.getItem('id'),
         ...this.queryParam
       }
+      var a = this.$store
       caseInfoCityList2(qs.stringify(params))
         .then(res => {
           this.data = res.result.data

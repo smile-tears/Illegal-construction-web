@@ -25,23 +25,8 @@
           <a-input v-if="!modalData.view && modalData.page == 0" v-decorator="['title', {}]" />
           <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.title }}</span>
         </a-form-item>
-        <a-form-item label="上报人" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-          <a-tree-select
-            v-if="!modalData.view  && modalData.page == 0"
-            v-decorator="['reportor', {}]"
-            style="width: 100%"
-            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-            :tree-data="personTreeData"
-            placeholder
-            tree-default-expand-all
-          ></a-tree-select>
-          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.name }}</span>
-        </a-form-item>
-        <!-- <a-form-item label="上报时间" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-input :disabled="true" v-decorator="['reportTime', {}]" />
-      </a-form-item> -->
 
-        <a-form-item label="公司" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+        <a-form-item label="被检单位" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-select
             v-if="!modalData.view && modalData.page == 0"
             show-search
@@ -62,7 +47,94 @@
           <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.companyName }}</span>
         </a-form-item>
 
-        <a-form-item label="所属网格" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+        <a-form-item label="地址" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
+          <a-textarea
+            v-if="!modalData.view && modalData.page == 0"
+            v-decorator="['locationDesc', { rules: [{ required: true, message: '位置描述必填！' }] }]"
+            :auto-size="{ minRows: 2, maxRows: 6 }"
+          />
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.locationDesc }}</span>
+        </a-form-item>
+
+        <a-form-item label="负责人" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-tree-select
+            v-if="!modalData.view  && modalData.page == 0"
+            show-search
+            v-decorator="['manager', {}]"
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="personTreeData"
+            placeholder
+            tree-default-expand-all
+          ></a-tree-select>
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.managerName }}</span>
+        </a-form-item>
+
+        <a-form-item label="联系电话" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input
+            v-if="!modalData.view && modalData.page == 0"
+            v-decorator="[
+              'managerMobile',
+              {
+                rules: [
+                  {
+                    required: true,
+                    type: 'number',
+                    message: '请输入数字！',
+                    transform: (value) => {
+                      return Number(value)
+                    },
+                  },
+                ],
+              },
+            ]"
+          />
+          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.managerMobile }}</span>
+        </a-form-item>
+
+        <a-form-item label="安全员" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-tree-select
+            v-if="!modalData.view  && modalData.page == 0"
+            :disabled="true"
+            show-search
+            v-decorator="['reportor', {}]"
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="personTreeData"
+            placeholder
+            tree-default-expand-all
+          ></a-tree-select>
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.reportorName }}</span>
+        </a-form-item>
+
+        <a-form-item label="联系电话" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input
+            v-if="!modalData.view && modalData.page == 0"
+            v-decorator="[
+              'reportorMobile',
+              {
+                rules: [
+                  {
+                    required: true,
+                    type: 'number',
+                    message: '请输入数字！',
+                    transform: (value) => {
+                      return Number(value)
+                    },
+                  },
+                ],
+              },
+            ]"
+          />
+          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.reportorMobile }}</span>
+        </a-form-item>
+
+        <a-form-item label="检查场所" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-input  v-if="!modalData.view && modalData.page == 0" v-decorator="['site', {}]"/>
+          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.site }}</span>
+        </a-form-item>
+
+        <!-- <a-form-item label="所属网格" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-select
             v-if="!modalData.view && modalData.page == 0"
             show-search
@@ -76,7 +148,7 @@
             </a-select-option>
           </a-select>
           <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.gridName }}</span>
-        </a-form-item>
+        </a-form-item> -->
 
         <a-form-item label="处置时限" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input
@@ -101,7 +173,7 @@
           <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.limittimes }}</span>
         </a-form-item>
 
-        <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
+        <!-- <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
           <a-input v-if="!modalData.view  && modalData.page == 0" v-decorator="['lng', {}]" style="width: 110px" />
           <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.lng }}</span>
           <span style="margin-left: 10px">纬度：</span>
@@ -134,16 +206,9 @@
               <a-input v-decorator="['lnglat.lat', {}]" style="width: 140px" />
             </div>
           </a-modal>
-        </a-form-item>
+        </a-form-item> -->
 
-        <a-form-item label="位置描述" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
-          <a-textarea
-            v-if="!modalData.view && modalData.page == 0"
-            v-decorator="['locationDesc', { rules: [{ required: true, message: '位置描述必填！' }] }]"
-            :auto-size="{ minRows: 2, maxRows: 6 }"
-          />
-          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.locationDesc }}</span>
-        </a-form-item>
+        
 
         <a-form-item label="备注" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
           <a-textarea
@@ -387,8 +452,9 @@ export default {
           }
 
           if (this.modalData.record.id === undefined) {
+            debugger
             this.form.setFieldsValue({
-              reportor: this.userInfo.id,
+              reportor: window.sessionStorage.getItem('id'),
               ...this.modalData.record,
             })
           } else {
