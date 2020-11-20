@@ -93,7 +93,7 @@
         <input type="button" class="btn" value="关闭人员点聚合" :hidden="showPerson" id="stopPerson" @click="closeUserPosition()"/>
       </div>
       <div class="input-item">
-        <input type="button" class="btn" value="人员轨迹" id="personHis" @click="pauseAnimation()"/>
+        <input type="button" class="btn" value="人员轨迹" id="personHis" @click="showTracking()"/>
       </div>
       <!--<a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>-->
       <!--<a-icon v-else type="fullscreen-exit" :style="{ fontSize: '30px'}"  @click="exitFullScreen()"/>-->
@@ -574,6 +574,10 @@
       change(pagination, filters, sorter) {
         this.pagination = pagination
         this.loadUser()
+      },
+
+      showTracking(){
+
       }
     }
   }
