@@ -327,7 +327,7 @@ export default {
       //        map.setFitView()
       this.map = map
 
-      //        this.loadUndealCase();
+      this.loadUndealCase();
       //        this.polyEditor = polyEditor
     },
 
@@ -427,7 +427,7 @@ export default {
           template: info.join(''),
           methods: {
             callVedio(managerId) {
-              this.pushMobile(managerId)
+              _this.pushMobile(managerId)
               window.open(config.chatUrl, 'chat', null, null)
             },
           },
@@ -472,7 +472,7 @@ export default {
           template: info.join(''),
           methods: {
             callVedio(managerId) {
-              this.pushMobile(managerId)
+              _this.pushMobile(managerId)
               window.open(config.chatUrl, 'chat', null, null)
             },
           },
