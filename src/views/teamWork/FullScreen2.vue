@@ -92,8 +92,10 @@
       </a-card>
     </a-col>
 
-    <div id="amapContainer" class="input-card" style="width: 130px">
-      <div class="input-item">
+
+
+    <div id="amapContainer" class="input-card" style="width: 320px">
+      <div class="input-item" style="width: 110px">
         <input
           type="button"
           class="btn"
@@ -111,11 +113,11 @@
           @click="closeUndealCase()"
         />
       </div>
-      <div class="input-item">
+      <div class="input-item" style="width: 100px">
         <input
           type="button"
           class="btn"
-          value="开启人员点聚合"
+          value="开启人员定位"
           :hidden="!showPerson"
           id="startPerson"
           @click="loadUserPosition()"
@@ -123,13 +125,13 @@
         <input
           type="button"
           class="btn"
-          value="关闭人员点聚合"
+          value="关闭人员定位"
           :hidden="showPerson"
           id="stopPerson"
           @click="closeUserPosition()"
         />
       </div>
-      <div class="input-item">
+      <div class="input-item" style="width: 80px">
         <input type="button" class="btn" value="人员轨迹" id="personHis" @click="showTracking()" />
       </div>
       <!--<a-icon v-if="!isFullScreen" type="fullscreen" :style="{ fontSize: '30px'}" @click="fullScreen()"/>-->
@@ -152,34 +154,17 @@
   bottom: initial;
   right: 0rem;
   top: 0rem;
+  display: inline-block;
 }
+#amapContainer > .input-item{
+  float:left;
+}
+
 #amapContainer > .input-item > .btn {
   margin: auto;
 }
 
-#gridContainer {
-  position: absolute;
-  bottom: initial;
-  left: 0rem;
-  top: 0rem;
-}
-#gridContainer .ant-table-tbody > tr > td {
-  padding: 6px 6px;
-  overflow-wrap: break-word;
-}
 
-.statistics_bg {
-  background: deepskyblue;
-  text-align: center;
-  color: white;
-  padding: 20px;
-}
-.statistics_title {
-  font-size: 20px;
-}
-.statistics_content {
-  font-size: 35px;
-}
 </style>
 <script>
 //import AMap from 'AMap'
