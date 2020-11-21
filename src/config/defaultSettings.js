@@ -12,7 +12,9 @@
  * storageOptions: {} - Vue-ls 插件配置项 (localStorage/sessionStorage)
  *
  */
-const url = process.env.NODE_ENV === 'production' ? '218.2.234.194:8081' : 'localhost:8088'
+// const url = process.env.NODE_ENV === 'production' ? '218.2.234.194:8081' : 'localhost:8088'
+const url = process.env.NODE_ENV === 'production' ? '49.64.220.144:8088' : 'localhost:8088'
+
 export default {
   // wsUrl: 'ws://localhost:8088/websocket/', // 218.2.234.194
   wsUrl: 'ws://' + url + '/websocket/',
