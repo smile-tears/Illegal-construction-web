@@ -18,7 +18,7 @@ const url = process.env.NODE_ENV === 'production' ? '49.64.220.144:8088' : 'loca
 export default {
   // wsUrl: 'ws://localhost:8088/websocket/', // 218.2.234.194
   wsUrl: 'ws://' + url + '/websocket/',
-  chatUrl: 'http://' + url + '/cityManage/vedio',
+  chatUrl: 'https://' + url + '/cityManage/vedio',
   primaryColor: '#52C41A', // primary color of ant design
   navTheme: 'dark', // theme for nav menu
   layout: 'topmenu', // nav menu position: sidemenu or topmenu
