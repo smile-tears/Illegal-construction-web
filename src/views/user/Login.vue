@@ -145,10 +145,19 @@ export default {
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
         smsSendBtn: false
-      }
+      },
     }
   },
   created () {
+    var username = this.$route.query.username
+    if (this.$route.query.username !== undefined) {
+      this.otherSysAcc = username
+      var loginParams = {
+        username: username,
+        password: '123'
+      }
+      this.otherSysLogin(loginParams)
+    }
     /*get2step({ })
       .then(res => {
         this.requiredTwoStepCaptcha = res.result.stepCode
@@ -161,6 +170,19 @@ export default {
   methods: {
     ...mapActions(['Login', 'Logout']),
     // handler
+    otherSysLogin(loginParams) {
+      const { Login } = this
+      Login(loginParams)
+        .then(res => {
+          //console.log('Login.res',res)
+          if(res.code === 200)
+            this.loginSuccess(res)
+        })
+        .catch(err => this.requestFailed(err))
+        .finally(() => {
+          //state.loginBtn = false
+        })
+    },
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
       const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
@@ -260,12 +282,13 @@ export default {
     loginSuccess (res) {
       console.log('loginSuccess', res)
       window.sessionStorage.setItem('id', res.result.id)
-      userMenuTree(qs.stringify({userId: res.result.id})).then(response => {
-        //this.$store.commit('SET_ROUTES',menus)
-        window.sessionStorage.setItem('addRoutes',JSON.stringify(response.result))
-        window.sessionStorage.setItem('isGenerateRoutes','false')
-        this.$router.push({ path: '/firstPage' })
-      })
+      // userMenuTree(qs.stringify({userId: res.result.id})).then(response => {
+      //   //this.$store.commit('SET_ROUTES',menus)
+      //   window.sessionStorage.setItem('addRoutes',JSON.stringify(response.result))
+      //   window.sessionStorage.setItem('isGenerateRoutes','false')
+      //   this.$router.push({ path: '/firstPage' })
+      // })
+      this.$router.push({ path: '/firstPage' })
       // eslint-disable-next-line handle-callback-err
       .catch(err => {
         // Do something

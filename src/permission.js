@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import router from './router'
 import store from './store'
@@ -9,6 +8,8 @@ import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { getAsyncRoutes } from '@/utils/asyncRouter'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import {userMenuTree} from '@/api/menu'
+import qs from 'qs'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -26,24 +27,29 @@ router.beforeEach( async (to, from, next) => {
             NProgress.done()
         } else {
             //异步获取store中的路由
-            let addRoutes =  JSON.parse(window.sessionStorage.getItem('addRoutes'))
+           
             let isGenerateRoutes = window.sessionStorage.getItem('isGenerateRoutes')
-            var that =router
-            //debugger
+            var that = router 
             if ( isGenerateRoutes == 'true' ) {
                 next()
             } else {
                 try {
-                    const accessRoutes = getAsyncRoutes( addRoutes );
-                    // 动态添加格式化过的路由
-                    //debugger
-                    if(accessRoutes && accessRoutes.length > 0) {
-                      router.addRoutes(accessRoutes);
-                      window.sessionStorage.setItem('isGenerateRoutes', 'true')
-                      next({ ...to, replace: true })
-                    } else {
-                      next()
-                    }
+                    userMenuTree(qs.stringify({userId: window.sessionStorage.getItem('id')})).then(response => {
+                        window.sessionStorage.setItem('addRoutes',JSON.stringify(response.result))
+                        window.sessionStorage.setItem('isGenerateRoutes','false')
+                        let addRoutes =  JSON.parse(window.sessionStorage.getItem('addRoutes'))
+                        const accessRoutes = getAsyncRoutes( addRoutes );
+                        // 动态添加格式化过的路由
+                        //debugger
+                        if(accessRoutes && accessRoutes.length > 0) {
+                        router.addRoutes(accessRoutes);
+                        window.sessionStorage.setItem('isGenerateRoutes', 'true')
+                        next({ ...to, replace: true })
+                        } else {
+                        next()
+                        }
+                    })
+                    
                     
                 } catch (error) {
                     // Message.error('出错了')
@@ -56,7 +62,7 @@ router.beforeEach( async (to, from, next) => {
         if (whiteList.indexOf(to.path) !== -1) {
             next()
         } else {
-            next(`/user/login?redirect=${to.path}`)
+            next(`/user/login`)
             NProgress.done()
         }
     }
