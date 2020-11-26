@@ -1,6 +1,6 @@
 <template>
   <div :style="{ padding: '0 0 32px 32px' }">
-    <h4 :style="{ marginBottom: '20px' }">{{ title }}</h4>
+    <h4 :style="{ marginBottom: '0px' }">{{ title }}</h4>
     <!--<v-chart-->
       <!--height="254"-->
       <!--:data="data"-->
@@ -20,7 +20,7 @@
 </template>
 <style type="text/css">
   #mountNode{
-    height: 260px;
+    height: 410px;
     padding-left: -20px;
   }
 </style>
@@ -111,7 +111,7 @@ export default {
     var chart = new G2.Chart({
       container: 'mountNode',
       forceFit: true,
-      height: 280,
+      height: 410,
       // window.innerHeight
     });
     chart.source(dv);
