@@ -1,7 +1,6 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  questionTypeTree: '/questionType/tree',
   questionTypeList: '/questionType/find',
   questionTypePost: '/questionType/post',
   questionTypeDelete: '/questionType/delete',
@@ -9,14 +8,6 @@ const api = {
 }
 
 export default api
-
-export function questionTypeTree(parameter) {
-  return axios({
-    url: api.questionTypeTree,
-    method: 'post',
-    data: parameter
-  })
-}
 
 export function questionTypeList(parameter) {
   return axios({
