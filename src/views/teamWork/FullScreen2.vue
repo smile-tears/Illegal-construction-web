@@ -429,8 +429,9 @@ export default {
     _renderMarker: function (context) {
       var _this = this
       var map = this.map
-      var content =
-        '<div style="background-color: hsla(348,100%,62%,0.3); height: 18px; width: 18px; border: 1px solid hsl(357,67%,48%); border-radius: 12px; box-shadow: hsl(351,100%,67%) 0px 0px 3px;"></div>'
+//      var content =
+//        '<div style="background-color: hsla(348,100%,62%,0.3); height: 18px; width: 18px; border: 1px solid hsl(357,67%,48%); border-radius: 12px; box-shadow: hsl(351,100%,67%) 0px 0px 3px;"></div>'
+      var content = '<div style="background: url(http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png); background-size:cover; height: 30px; width: 20px;"></div>';
       var offset = new AMap.Pixel(-9, -9)
       var data = context.data[0]
       context.marker.setContent(content)
@@ -494,6 +495,7 @@ export default {
       var _this = this
       _this.showUndealCase = false
       const gridSize = 60
+
       caseInfoFind2(qs.stringify({ status: 1 }))
         .then((res) => {
           if (res.code === 200) {
@@ -517,6 +519,7 @@ export default {
             //添加聚合组件
             cluster = new AMap.MarkerClusterer(map, points, {
               gridSize: gridSize,
+//              styles: styles
               renderClusterMarker: _this._renderClusterMarker, // 自定义聚合点样式
               renderMarker: _this._renderMarker, // 自定义非聚合点样式
             })
@@ -594,7 +597,7 @@ export default {
               {
                 gridSize: gridSize, // 设置网格像素大小
                 styles: styles,
-                renderMarker: _this._renderMarker2,
+//                renderMarker: _this._renderMarker2,
               }
             )
             _this.personCluster = cluster
