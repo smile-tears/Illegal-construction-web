@@ -20,6 +20,7 @@
                 <a-tree-select
                     v-model="queryParam.userid"
                     show-search
+                    treeNodeFilterProp="title"
                     style="width: 250px"
                     :dropdown-style="{ maxHeight: '300px', overflow: 'auto' }"
                     :tree-data="personTreeData"

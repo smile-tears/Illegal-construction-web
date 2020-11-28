@@ -11,13 +11,37 @@
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="6">
+              <!--<a-form-item label="网格">-->
+                <!--<a-input v-model="queryParam.grid" style="width: 250px;"/>-->
+              <!--</a-form-item>-->
               <a-form-item label="网格">
-                <a-input v-model="queryParam.grid" style="width: 250px;"/>
+                <a-select
+                  style="width: 250px;"
+                  v-model="queryParam.grid"
+                  show-search
+                  placeholder=""
+                  option-filter-prop="children"
+                  :filter-option="filterOption"
+                >
+                  <a-select-option v-for="(grid) in gridDataList" :key="grid.id" :value="grid.id" >
+                    {{grid.gridName}}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
+
             </a-col>
             <a-col :md="6" :sm="6">
-              <a-form-item label="人员">
-                <a-input v-model="queryParam.manager" style="width: 250px;"/>
+              <a-form-item label="人员" >
+                <a-tree-select
+                  v-model="queryParam.manager"
+                  show-search
+                  treeNodeFilterProp="title"
+                  style="width: 250px"
+                  :dropdown-style="{ maxHeight: '300px', overflow: 'auto' }"
+                  :tree-data="personTreeData"
+                  placeholder
+                  tree-default-expand-all
+                ></a-tree-select>
               </a-form-item>
             </a-col>
             <a-col :md="4" :sm="4">
@@ -76,6 +100,8 @@
 
 </template>
 <script>
+  import { getSubCompanyUserTree } from '@/api/manage'
+  import {gridCommunityList} from '@/api/gridCommunity'
   import { reportTable } from '@/api/case'
   import qs from 'qs'
   import { Ellipsis } from '@/components'
@@ -203,6 +229,10 @@
     mounted () {
       this.init()
     },
+    created () {
+      this.gridList();
+      this.getSubCompanyUserTree();
+    },
 
     data () {
       return {
@@ -210,6 +240,8 @@
         columns,
         modalData: {},
         queryParam: {},
+        gridDataList: [],
+        personTreeData: [],
 
         //饼图
         pieScale,
@@ -326,6 +358,32 @@
           })
       },
 
+      filterOption(input, option) {
+        return (
+          option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        );
+      },
+      gridList() {
+        gridCommunityList()
+          .then(res => {
+            if (res.code === 200) {
+              this.gridDataList = res.result.data
+            }
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch(err => {
+            // Do something
+          })
+      },
+      getSubCompanyUserTree() {
+        getSubCompanyUserTree()
+          .then((res) => {
+            if (res.code === 200) {
+              this.personTreeData = res.result
+            }
+          })
+          .catch(() => {})
+      }
     }
   }
 </script>
