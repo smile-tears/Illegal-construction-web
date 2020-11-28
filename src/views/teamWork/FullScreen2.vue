@@ -532,6 +532,7 @@ export default {
         })
     },
 
+
     closeUserPosition() {
       this.showPerson = true
       if (this.personCluster) {
