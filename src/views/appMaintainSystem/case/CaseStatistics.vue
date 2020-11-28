@@ -242,56 +242,56 @@
         }
 
         this.data = [
-          {
-            gridName: '堰桥片区',
-            manager: '人员1',
-            reportNum: '20',
-            dealedNum: '16',
-            dealedPercent: '80%',
-            overtimeNum: '2',
-            overtimePercent: '10',
-            rowSpan:'2'
-          },
-          {
-            gridName: '堰桥片区',
-            manager: '人员2',
-            reportNum: '20',
-            dealedNum: '18',
-            dealedPercent: '90%',
-            overtimeNum: '2',
-            overtimePercent: '10',
-            rowSpan:'0'
-          },
-          {
-            gridName: '西漳片区',
-            manager: '人员3',
-            reportNum: '20',
-            dealedNum: '18',
-            dealedPercent: '90%',
-            overtimeNum: '2',
-            overtimePercent: '10',
-            rowSpan:'3'
-          },
-          {
-            gridName: '西漳片区',
-            manager: '人员4',
-            reportNum: '20',
-            dealedNum: '18',
-            dealedPercent: '90%',
-            overtimeNum: '2',
-            overtimePercent: '10',
-            rowSpan:'0'
-          },
-          {
-            gridName: '西漳片区',
-            manager: '人员5',
-            reportNum: '20',
-            dealedNum: '18',
-            dealedPercent: '90%',
-            overtimeNum: '2',
-            overtimePercent: '10',
-            rowSpan:'0'
-          }
+//          {
+//            gridName: '堰桥片区',
+//            manager: '人员1',
+//            reportNum: '20',
+//            dealedNum: '16',
+//            dealedPercent: '80%',
+//            overtimeNum: '2',
+//            overtimePercent: '10',
+//            rowSpan:'2'
+//          },
+//          {
+//            gridName: '堰桥片区',
+//            manager: '人员2',
+//            reportNum: '20',
+//            dealedNum: '18',
+//            dealedPercent: '90%',
+//            overtimeNum: '2',
+//            overtimePercent: '10',
+//            rowSpan:'0'
+//          },
+//          {
+//            gridName: '西漳片区',
+//            manager: '人员3',
+//            reportNum: '20',
+//            dealedNum: '18',
+//            dealedPercent: '90%',
+//            overtimeNum: '2',
+//            overtimePercent: '10',
+//            rowSpan:'3'
+//          },
+//          {
+//            gridName: '西漳片区',
+//            manager: '人员4',
+//            reportNum: '20',
+//            dealedNum: '18',
+//            dealedPercent: '90%',
+//            overtimeNum: '2',
+//            overtimePercent: '10',
+//            rowSpan:'0'
+//          },
+//          {
+//            gridName: '西漳片区',
+//            manager: '人员5',
+//            reportNum: '20',
+//            dealedNum: '18',
+//            dealedPercent: '90%',
+//            overtimeNum: '2',
+//            overtimePercent: '10',
+//            rowSpan:'0'
+//          }
         ];
 //        var a = this.$store
         reportTable(qs.stringify(params))

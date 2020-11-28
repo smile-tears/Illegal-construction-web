@@ -73,18 +73,30 @@ export default {
   },
   data () {
     return {
+      chart:null
     }
   },
   watch: {
     data (val) {
-      this.init()
+      this.loadData();
     }
   },
   mounted(){
     this.init();
+    this.loadData();
   },
   methods:{
     init(){
+      var chart = new G2.Chart({
+        container: 'mountNode',
+        forceFit: true,
+        height: 410,
+        // window.innerHeight
+      });
+      this.chart = chart;
+    },
+    loadData(){
+      var chart = this.chart;
       var data = this.data
       var ds = new DataSet();
       var dv = ds.createView().source(data);
@@ -94,15 +106,9 @@ export default {
         key: '区', // key字段
         value: '案件数' // value字段
       });
-
-      var chart = new G2.Chart({
-        container: 'mountNode',
-        forceFit: true,
-        height: 410,
-        // window.innerHeight
-      });
       chart.source(dv);
-      chart.intervalStack().position('区*案件数').color('name');
+//      chart.intervalStack().position('区*案件数').color('name');
+      chart.interval().position('区*案件数').color('name');
       chart.render();
     }
   }
