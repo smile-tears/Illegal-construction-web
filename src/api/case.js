@@ -19,7 +19,9 @@ const api = {
   caseInfoFind2: '/caseInfoCity/find2',
   userList: '/user/user-grid',
   companyByUser: '/companyManage/find',
-  userPosition: '/userPosition/recent'
+  userPosition: '/userPosition/recent',
+  // 统计报表
+  reportTable: 'caseInfoCity/report2'
 }
 
 export default api
@@ -142,6 +144,14 @@ export function companyByUser (parameter) {
 export function userPosition (parameter) {
   return axios({
     url: api.userPosition,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function reportTable (parameter) {
+  return axios({
+    url: api.reportTable,
     method: 'post',
     data: parameter
   })
