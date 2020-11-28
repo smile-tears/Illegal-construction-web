@@ -92,8 +92,8 @@ const vueConfig = {
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '/api': {
-        target: 'http://49.64.220.144:8088', // 要访问的接口域名
-        // target: 'http://localhost:8088',
+        // target: 'http://49.64.220.144:8088', // 要访问的接口域名
+        target: 'http://localhost:8088',
         // target: 'http://218.2.234.194:8081',
         ws: true, // 是否启用websockets
         changeOrigin: true,

@@ -64,13 +64,17 @@
         <a v-if="page == 0 || page == 1" @click="edit(record)">{{page == 0 ? '编辑' : '处置'}}</a>
         <a-divider v-if="page == 0" type="vertical" />
         <a v-if="page == 0" @click="del('single',record)">删除</a>
+
+        <a-divider v-if="page == 2" type="vertical" />
+        <a v-if="page == 2" @click="exportWord(record)">导出word</a>
+
       </template>
     </a-table>
     <ReportEdit :modalData="modalData" @handleModalEvent="handleModalEvent"></ReportEdit>
   </div>
 </template>
 <script>
-import { caseInfoCityList, caseInfoCityList2, caseInfoCityDelete } from '@/api/case'
+import { caseInfoCityList, caseInfoCityList2, caseInfoCityDelete, exportWord } from '@/api/case'
 import ReportEdit from './ReportEdit'
 import qs from 'qs'
 import { Ellipsis } from '@/components'
@@ -123,6 +127,7 @@ const columns = [
     title: '操作',
     key: 'action',
     align: 'center',
+    width: 150,
     scopedSlots: { customRender: 'action' }
   }
 ]
@@ -163,6 +168,18 @@ export default {
   methods: {
     init() {
       this.loadData()
+    },
+    exportWord(record) {
+      var params = { 
+        id: record.id 
+      }
+      exportWord(qs.stringify(params))
+        .then(res => {
+          debugger
+          window.open('http://49.64.220.144:8088' + res.result)
+        }).catch(err => {
+        
+        })
     },
     loadData () {
       var params = {
