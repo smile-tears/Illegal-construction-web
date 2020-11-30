@@ -439,18 +439,15 @@ export default {
       context.marker.on('click', function (e) {
         var infoWindow = _this.infoWindow
         var info = []
-        info.push('<div style="padding:7px 0px 0px 0px;"><h4>未处置事件（' + data.title + '）</h4>')
-        info.push(
-          "<p class='input-item'>" +
-            data.reportorName +
-            '   ' +
-            data.reportorMobile +
-            "<a class='btn' @click='callVedio(\"" +
-            data.reportor +
-            '")\'>视频通话</a>' +
-            '</p>'
-        )
-        info.push("<p class='input-item'>" + data.managerName + '   ' + data.managerMobile + '</p>')
+        info.push('<div style="padding:7px 0px 0px 0px;">');
+        info.push('<h4>基础信息</h4>');
+        if(data.title)info.push("<p class='input-item'>标题：" + data.title + '</p>');
+        if(data.companyName)info.push("<p class='input-item'>被检测单位：" + data.companyName + '</p>');
+        info.push("<p class='input-item'>安全员：" + data.reportorName + "<a class='btn' @click='callVedio(\"" + data.reportor + '")\'>视频通话</a>' + '</p>');
+        if(data.locationDesc)info.push("<p class='input-item'>地址：" + data.locationDesc + '</p>');
+        if(data.manager)info.push("<p class='input-item'>负责人：" + data.manager + '</p>');
+        if(data.managerMobile)info.push("<p class='input-item'>联系电话：" + data.managerMobile + '</p>');
+        info.push("</div>");
 
         let InfoContent = Vue.extend({
           template: info.join(''),
