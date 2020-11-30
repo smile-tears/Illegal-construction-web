@@ -21,7 +21,9 @@ const api = {
   companyByUser: '/companyManage/find',
   userPosition: '/userPosition/recent',
   // 统计报表
-  reportTable: 'caseInfoCity/report2'
+  reportTable: 'caseInfoCity/report2',
+  
+  exportWord: '/caseInfoCity/word',
 }
 
 export default api
@@ -152,6 +154,14 @@ export function userPosition (parameter) {
 export function reportTable (parameter) {
   return axios({
     url: api.reportTable,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function exportWord (parameter) {
+  return axios({
+    url: api.exportWord,
     method: 'post',
     data: parameter
   })
