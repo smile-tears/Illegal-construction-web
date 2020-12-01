@@ -55,7 +55,9 @@
           <div v-if="parseInt(record.state) === 2" class="dot" style="background: red;width: 12px;height: 12px;border-radius: 6px;"></div>
         </div>
         <div v-else-if="page == 2">
-          {{record.handleState == 0 ? '未处置' : '已处置' }}
+          
+          {{record.status == '1' ? '已上报' : '' }}
+          {{record.status == '2' ? '已处置' : '' }}
         </div>
       </span>
       <template slot="action" slot-scope="text,record">
