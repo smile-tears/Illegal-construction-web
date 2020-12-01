@@ -390,8 +390,10 @@ export default {
     _renderMarker2: function (context) {
       var _this = this
       var map = this.map
-      var content =
-        '<div style="background-color: hsla(180, 100%, 50%, 0.3); height: 18px; width: 18px; border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 3px;"></div>'
+//      var content =
+//        '<div style="background-color: hsla(180, 100%, 50%, 0.3); height: 18px; width: 18px; border: 1px solid hsl(180, 100%, 40%); border-radius: 12px; box-shadow: hsl(180, 100%, 50%) 0px 0px 3px;"></div>'
+      var content = '<div style="background: url(http://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png); background-size:cover; height: 30px; width: 20px;"></div>';
+
       var offset = new AMap.Pixel(-9, -9)
       var data = context.data[0]
       context.marker.setContent(content)
@@ -401,8 +403,10 @@ export default {
 
         var infoWindow = _this.infoWindow
         var info = []
-        info.push('<div style="padding:7px 0px 0px 0px;"><h4>人员（' + data.name + '）</h4>')
-        info.push("<a class='btn' @click='callVedio(\"" + data.userid + '")\'>视频通话</a>')
+        info.push('<div style="padding:7px 0px 0px 0px;"><h4>人员信息（' + data.name + '）</h4>')
+        info.push("<p class='input-item'>姓名：" + data.name + '</p>');
+        var mobile = data.mobile?data.mobile:"";
+        info.push("<p class='input-item'>电话：" + mobile + "<a class='btn' @click='callVedio(\"" + data.userid + '")\'>视频通话</a>'+ '</p>');
         info.push('</div>')
 
         let InfoContent = Vue.extend({
@@ -594,8 +598,8 @@ export default {
               points, // 海量点数据，数据中需包含经纬度信息字段 lnglat
               {
                 gridSize: gridSize, // 设置网格像素大小
-                styles: styles,
-//                renderMarker: _this._renderMarker2,
+//                styles: styles,
+                renderMarker: _this._renderMarker2,
               }
             )
             _this.personCluster = cluster
