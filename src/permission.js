@@ -20,10 +20,11 @@ const whiteList = ['/user/login'];
 router.beforeEach( async (to, from, next) => {
     NProgress.start()
     // 获取用户token，用来判断当前用户是否登录
-    const hasToken = Vue.ls.get(ACCESS_TOKEN)
+    const hasToken = window.sessionStorage.getItem(ACCESS_TOKEN)
     if (hasToken) {
         if (to.path === '/user/login') {
             next()
+            window.sessionStorage.setItem(ACCESS_TOKEN,'')
             NProgress.done()
         } else {
             //异步获取store中的路由

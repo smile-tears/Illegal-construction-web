@@ -197,7 +197,8 @@ const user = {
         }).finally(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
-          Vue.ls.remove(ACCESS_TOKEN)
+          //Vue.ls.remove(ACCESS_TOKEN)
+		  window.sessionStorage.setItem(ACCESS_TOKEN,'')
         })
       })
     }

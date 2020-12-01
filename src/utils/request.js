@@ -15,7 +15,8 @@ const err = (error) => {
   console.log('err', error)
   if (error.response) {
     const data = error.response.data
-    const token = Vue.ls.get(ACCESS_TOKEN)
+    //const token = Vue.ls.get(ACCESS_TOKEN)
+	const token = window.sessionStorage.getItem(ACCESS_TOKEN)
     if (error.response.status === 403) {
       notification.error({
         message: 'Forbidden',
@@ -41,7 +42,8 @@ const err = (error) => {
 
 // request interceptor
 service.interceptors.request.use(config => {
-  const token = Vue.ls.get(ACCESS_TOKEN)
+  //const token = Vue.ls.get(ACCESS_TOKEN)
+  const token = window.sessionStorage.getItem(ACCESS_TOKEN)
   if (token) {
     // config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
     config.headers['token'] = token
@@ -55,7 +57,8 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use((response) => {
   // console.log('response', response)
   if (response.headers && response.headers.token) {
-    Vue.ls.set(ACCESS_TOKEN, response.headers.token, 7 * 24 * 60 * 60 * 1000)
+	window.sessionStorage.setItem(ACCESS_TOKEN, response.headers.token)
+    //Vue.ls.set(ACCESS_TOKEN, response.headers.token, 7 * 24 * 60 * 60 * 1000)
   }
   if (response.data.code !== 200) {
     // http接口错误 返回提示
