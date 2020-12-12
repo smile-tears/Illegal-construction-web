@@ -33,4 +33,11 @@ export default {
 .ant-modal {
   top: 65px !important;
 }
+
+.ant-pagination-options-quick-jumper {
+  width: 100px;
+}
+.ant-pagination-options-quick-jumper input {
+  width: 28px !important;
+}
 </style>
