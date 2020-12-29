@@ -95,6 +95,12 @@ const columns = [
     key: 'title'
   },
   {
+    title: '违建类型',
+    dataIndex: 'typeName',
+    key: 'typeName'
+  },
+  
+  {
     title: '上报时间',
     dataIndex: 'reportTime',
     key: 'caseType'
@@ -122,7 +128,8 @@ const columns = [
   {
     title: '地址',
     dataIndex: 'locationDesc',
-    key: 'locationDesc'
+    key: 'locationDesc',
+    width: 200
   },
   
   {

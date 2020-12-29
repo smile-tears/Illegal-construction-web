@@ -47,6 +47,11 @@
           <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.companyName }}</span>
         </a-form-item>
 
+        <a-form-item label="违建类型" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
+
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.typeName }}</span>
+        </a-form-item>
+
         <a-form-item label="地址" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
           <a-textarea
             v-if="!modalData.view && modalData.page == 0"
@@ -67,7 +72,7 @@
             placeholder
             tree-default-expand-all
           ></a-tree-select>
-          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.managerName }}</span>
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.manager }}</span>
         </a-form-item>
 
         <a-form-item label="联系电话" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
@@ -169,8 +174,8 @@
               },
             ]"
             style="width: 200px"
-          />（小时）
-          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.limittimes }}</span>
+          />
+          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.limittimes }}</span>（小时）
         </a-form-item>
 
         <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
