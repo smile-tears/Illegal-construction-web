@@ -77,6 +77,7 @@ const columns = [
   { 
     title: '内容',
     dataIndex: 'content',
+    ellipsis: true,
     key: 'content',
   },
   {

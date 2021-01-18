@@ -17,7 +17,7 @@
           <a-input :disabled="modalData.disabled" v-decorator="['title', {}]" />
         </a-form-item>
 		    <a-form-item label="内容" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-          <a-textarea :disabled="modalData.disabled" v-decorator="['content', {}]" />
+          <a-textarea rows="5" cols="100" :disabled="modalData.disabled" v-decorator="['content', {}]" />
         </a-form-item>
 
         <a-form-item label="发送给" :label-col="labelCol" :wrapper-col="wrapperCol">
@@ -35,7 +35,7 @@
             tree-default-expand-all
             @change="onChange"
           ></a-tree-select>
-
+          <a-button @click="selectAll" v-show="!modalData.disabled">全选</a-button>
           <a-table
             v-show="modalData.disabled"
             :columns="userColumns"
@@ -159,7 +159,17 @@ export default {
     handleCancel () {
       this.modalData.visible = false
     },
-
+    selectAll() {
+      console.log("selectAll")
+      this.value = []
+      this.selectUser(this.treeData);
+    },
+    selectUser(data){
+      data.forEach(element => {
+        if (element.type == 'user') this.value.push(element.value)
+        if (element.children && element.children.length > 0) this.selectUser(element.children)
+      })
+    },
     recursionUserTree (data) {
       data.forEach(element => {
         if (element.type != 'user') element.disabled = true
