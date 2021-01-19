@@ -88,7 +88,7 @@ export default {
           dataIndex: 'status',
           key: 'status',
           customRender: function (text, record, index) {
-            return text === 1 ? '已读' : '未读'
+            return text === 1 ? '未读' : '已读'
           }
         }
       ],
@@ -163,6 +163,7 @@ export default {
       console.log("selectAll")
       this.value = []
       this.selectUser(this.treeData);
+      this.onChange(this.value)
     },
     selectUser(data){
       data.forEach(element => {
