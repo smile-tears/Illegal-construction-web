@@ -115,7 +115,7 @@
                 <a-input
                   :disabled="isEdit"
                   placeholder="登录密码"
-                  v-decorator="['password',{rules: [{ required: true, message: '请输入登录密码' }]}]"
+                  v-decorator="['password',{rules: [{ required: !isEdit, message: '请输入登录密码' }]}]"
                   type="password"
                 ></a-input>
               </a-form-item>
