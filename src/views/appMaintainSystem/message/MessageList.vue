@@ -1,21 +1,11 @@
 <template>
   <div class='container'>
-  	<!-- <div class="table-page-search-wrapper">
+  	<div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="48">
-            		  <a-col :md="8" :sm="8">
-            <a-form-item label="id">
-              <a-input v-model="queryParam.id" placeholder=""/>
-            </a-form-item>
-          </a-col>
-  		  <a-col :md="8" :sm="8">
-            <a-form-item label="类型名称">
-              <a-input v-model="queryParam.typeName" placeholder=""/>
-            </a-form-item>
-          </a-col>
-  		  <a-col :md="8" :sm="8">
-            <a-form-item label="显示顺序">
-              <a-input v-model="queryParam.showOrder" placeholder=""/>
+  		    <a-col :md="8" :sm="8">
+            <a-form-item label="主题">
+              <a-input v-model="queryParam.title" placeholder=""/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
@@ -24,7 +14,7 @@
           </a-col>
         </a-row>
       </a-form>
-    </div> -->
+    </div>
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="add">新建</a-button>
       <!--<a-button type="danger" icon="delete" @click="del('batch')">删除</a-button>-->
@@ -52,8 +42,8 @@
         <a @click="info(record)">查看</a>
         <!--<a-divider type="vertical" />-->
         <!--<a @click="edit(record)">编辑</a>-->
-        <!--<a-divider type="vertical" />-->
-        <!--<a @click="del('single',record)">删除</a>-->
+        <a-divider type="vertical" />
+        <a @click="del('single',record)">删除</a>
       </template>
     </a-table>
     <MessageEdit :modalData="modalData" @handleModalEvent="handleModalEvent"></MessageEdit>
@@ -134,21 +124,21 @@ export default {
         title: '新建信息'
       }
     },
-//    del(type, record) {
-//      var ids = type === 'single' ? [record.id] : this.selectedRowKeys
-//      messageDelete(ids)
-//        .then(res => {
-//          if (res.code === 200) {
-//            this.loadData()
-//          } else {
+    del(type, record) {
+      var ids = type === 'single' ? [record.id] : this.selectedRowKeys
+      messageDelete(ids)
+        .then(res => {
+          if (res.code === 200) {
+            this.loadData()
+          } else {
 //            this.$message.error(res.message)
-//          }
-//        })
-//        // eslint-disable-next-line handle-callback-err
-//        .catch(err => {
-//          // Do something
-//        })
-//    },
+          }
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch(err => {
+          // Do something
+        })
+    },
     edit(record) {
       this.modalData = {
         record: record,

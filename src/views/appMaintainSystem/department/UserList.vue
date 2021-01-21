@@ -42,6 +42,10 @@
           <a @click="changePsd(record)">修改密码</a>
           <a-divider type="vertical" />
         </template>
+        <template>
+          <a @click="del(record)">删除</a>
+          <a-divider type="vertical" />
+        </template>
       </span>
     </s-table>
   </div>
@@ -92,7 +96,7 @@
           {
             title: '操作',
             dataIndex: 'action',
-            width: '200px',
+            width: '250px',
             scopedSlots: { customRender: 'action' }
           }
         ],
@@ -140,6 +144,23 @@
       },
       changePsd (record){
         this.$emit('onChangePsd',record)
+      },
+
+      del( record) {
+        var _this = this
+        var ids = [record.id]
+        deleteUser(ids)
+          .then(res => {
+            if (res.code === 200) {
+              _this.refresh(_this.queryParam)
+            } else {
+//              _this.$message.error(res.message)
+            }
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch(err => {
+            // Do something
+          })
       },
 
       refresh (param) {

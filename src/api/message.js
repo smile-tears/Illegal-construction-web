@@ -8,7 +8,7 @@ const api = {
 
 export default api
 
-export function messageList(parameter) {
+export function messageList (parameter) {
   return axios({
     url: api.messageList,
     method: 'post',
@@ -16,7 +16,7 @@ export function messageList(parameter) {
   })
 }
 
-export function messagePost(parameter) {
+export function messagePost (parameter) {
   return axios({
     url: api.messagePost,
     method: 'post',
@@ -24,7 +24,7 @@ export function messagePost(parameter) {
   })
 }
 
-export function messageDelete(parameter) {
+export function messageDelete (parameter) {
   return axios({
     url: api.messageDelete,
     method: 'post',
