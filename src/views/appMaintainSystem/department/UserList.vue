@@ -36,6 +36,11 @@
         </template>
         <template>
           <a @click="handleDetail(record)">详情</a>
+          <a-divider type="vertical" />
+        </template>
+        <template>
+          <a @click="changePsd(record)">修改密码</a>
+          <a-divider type="vertical" />
         </template>
       </span>
     </s-table>
@@ -87,7 +92,7 @@
           {
             title: '操作',
             dataIndex: 'action',
-            width: '150px',
+            width: '200px',
             scopedSlots: { customRender: 'action' }
           }
         ],
@@ -132,6 +137,9 @@
       },
       handleDetail (record) {
         this.$emit('onDetailUser',record)
+      },
+      changePsd (record){
+        this.$emit('onChangePsd',record)
       },
 
       refresh (param) {

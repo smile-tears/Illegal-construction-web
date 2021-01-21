@@ -52,7 +52,8 @@
                 :departmentId="selectKey"
                 @onAddUser="handleAddUser"
                 @onEditUser="handleEditUser"
-                @onDetailUser="handleDetailUser">
+                @onDetailUser="handleDetailUser"
+                @onChangePsd="handleChangePsd">
               </user-list>
             </a-tab-pane>
           </a-tabs>
@@ -64,6 +65,7 @@
     <edit ref="edit" :orgTree="orgTree" :subTreeData="subTreeData" @ok="handleSaveOk" @close="handleSaveClose" />
     <edit-sub ref="editSub" :subTreeData="subTreeData" @ok="SaveSubOk" @close="SaveSubClose" />
     <edit-user ref="editUser" :orgTree="orgTree" @ok="SaveUserOk" @close="SaveUserClose" />
+    <change-psd ref="changePsd" />
     <department-detail ref="detail" />
 
   </a-card>
@@ -80,6 +82,7 @@ import UserList from './department/UserList'
 import Edit from './department/Edit'
 import EditSub from './department/EditSub'
 import EditUser from './department/EditUser'
+import ChangePsd from './department/ChangePsd'
 import { getSubCompanyTree, getSubCompanyTree2, getDepartmentList, getSubCompanyList } from '@/api/manage'
 
 export default {
@@ -93,7 +96,8 @@ export default {
     UserList,
     Edit,
     EditSub,
-    EditUser
+    EditUser,
+    ChangePsd
   },
   data () {
     return {
@@ -279,6 +283,10 @@ export default {
       item['departmentName'] = this.selectTile
       console.log('edit button, item', item)
       this.$refs.editUser.detail(item)
+    },
+    handleChangePsd (item){
+      this.$refs.changePsd.changePsd(item)
+      ChangePsd
     },
     SaveSubOk () {
       this.loadTree(false)
