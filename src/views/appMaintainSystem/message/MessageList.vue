@@ -17,7 +17,7 @@
     </div>
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="add">新建</a-button>
-      <!--<a-button type="danger" icon="delete" @click="del('batch')">删除</a-button>-->
+      <a-button type="danger" icon="delete" @click="del('batch')">删除</a-button>
     </div>
 
     <a-table
