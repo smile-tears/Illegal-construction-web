@@ -4,10 +4,28 @@ const api = {
   questionTypeList: '/questionType/find',
   questionTypePost: '/questionType/post',
   questionTypeDelete: '/questionType/delete',
-  questionTypePut: '/questionType/put'
+  questionTypePut: '/questionType/put',
+  questionTypeFstLvl: '/questionType/fstLvl',
+  questionTypeSecLvl: '/questionType/secLvl',
 }
 
 export default api
+
+export function questionTypeFstLvl(parameter) {
+  return axios({
+    url: api.questionTypeFstLvl,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function questionTypeSecLvl(parameter) {
+  return axios({
+    url: api.questionTypeSecLvl,
+    method: 'post',
+    data: parameter
+  })
+}
 
 export function questionTypeList(parameter) {
   return axios({

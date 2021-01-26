@@ -44,8 +44,21 @@
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="add">新建</a-button>
-      <a-button type="danger" icon="delete" @click="del('batch')">删除</a-button>
+      <a-button style="float: left;" type="primary" icon="plus" @click="add">新建</a-button>
+      <a-button style="float: left;" type="danger" icon="delete" @click="del('batch')">删除</a-button>
+
+      <a-upload
+        style="float: left;"
+        name="file"
+        :multiple="false"
+        :action="BASE_URL+'/upload/company'"
+        :file-list="fileList"
+        @change="handleFileChange"
+      >
+        <a-button >批量导入</a-button>
+      </a-upload>
+      
+      <a :href="BASE_URL+'/file/公司信息模板.xls'"><a-button style="float: left;">下载模板</a-button></a>
     </div>
 
     <a-table
@@ -82,7 +95,7 @@ import { companyManageList, companyManageDelete } from '@/api/companyManage'
 import CompanyManageEdit from './CompanyManageEdit'
 import {gridCommunityList} from '@/api/gridCommunity'
 import qs from 'qs'
-
+const BASE_URL = process.env.NODE_ENV === 'production' ? '' : '/api'
 const columns = [
   {
     title: '序号',
@@ -168,6 +181,7 @@ export default {
   // },
   data() {
     return {
+      BASE_URL: BASE_URL,
       data: [],
       gridDataList: [],
       columns,
@@ -180,9 +194,24 @@ export default {
       companyManageNode: {},
       modalData: {},
       queryParam: {},
+      fileList: []
     }
   },
   methods: {
+    handleFileChange( {fileList} ) {
+      // debugger
+      if (fileList[0].status !== 'uploading') {
+        if (fileList[0].response.code == 200) {
+          this.$message.info('上传成功！')
+        } else {
+          this.$message.error('上传失败，错误信息：' + fileList[0].response.message) 
+        }
+        this.fileList = []
+      } else {
+        this.fileList = fileList
+      }
+      
+    },
     loadData() {
       var params = {
         pid: this.companyManageNode.value,

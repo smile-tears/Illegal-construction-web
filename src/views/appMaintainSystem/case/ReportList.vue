@@ -94,11 +94,11 @@ const columns = [
     dataIndex: 'title',
     key: 'title'
   },
-  {
-    title: '违建类型',
-    dataIndex: 'typeName',
-    key: 'typeName'
-  },
+  // {
+  //   title: '问题类型',
+  //   dataIndex: 'typeName',
+  //   key: 'typeName'
+  // },
   
   {
     title: '上报时间',

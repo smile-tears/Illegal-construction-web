@@ -75,6 +75,11 @@ const columns = [
     key: 'typeName',                              
   },
   { 
+    title: '所属一级类型',
+    dataIndex: 'fstLvlType.typeName',    
+    key: 'fstLvlType.typeName',                              
+  },
+  { 
     title: '显示顺序',
     dataIndex: 'showOrder',    
     key: 'showOrder',                              

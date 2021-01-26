@@ -154,7 +154,7 @@
 import { caseInfoCityList2, caseInfoCityDelete, caseInfoCityType } from '@/api/case'
 import Edit from './Edit'
 import { gridTree } from '@/api/gridCommunity'
-import { questionTypeTree } from '@/api/questionType'
+// import { questionTypeTree } from '@/api/questionType'
 import qs from 'qs'
 import { Ellipsis } from '@/components'
 import { mapGetters } from 'vuex'
@@ -231,7 +231,7 @@ export default {
   created () {
 
     this.getGridTree()
-    this.questionTypeTree()
+    //this.questionTypeTree()
 
     this.initWebSocket();
   },
@@ -413,15 +413,15 @@ export default {
         })
         .catch(() => {})
     },
-    questionTypeTree () {
-      questionTypeTree()
-        .then(res => {
-          if (res.code === 200) {
-            this.caseTypeTreeData = res.result
-          }
-        })
-        .catch(() => {})
-    },
+    // questionTypeTree () {
+    //   questionTypeTree()
+    //     .then(res => {
+    //       if (res.code === 200) {
+    //         this.caseTypeTreeData = res.result
+    //       }
+    //     })
+    //     .catch(() => {})
+    // },
 
     info (record) {
       this.modalData = {

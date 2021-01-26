@@ -2,8 +2,19 @@
   <div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd()">新建人员</a-button>
-
+      <a-button  type="primary" icon="plus" @click="handleAdd()">新建人员</a-button>
+      <a-upload
+        style="display: inline-block;"
+        name="file"
+        :multiple="false"
+        :action="BASE_URL+'/upload/user'"
+        :file-list="fileList"
+        @change="handleFileChange"
+      >
+        <a-button >批量导入</a-button>
+      </a-upload>
+      
+      <a :href="BASE_URL+'/file/人员信息模板.xls'"><a-button>下载模板</a-button></a>
       <!--<a-dropdown v-action:update v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -55,7 +66,7 @@
   import moment from 'moment'
   import { STable } from '@/components'
   import { getUserList, deleteUser } from '@/api/manage'
-
+  const BASE_URL = process.env.NODE_ENV === 'production' ? '' : '/api'
   export default {
     name: 'UserList',
     components: {
@@ -63,6 +74,8 @@
     },
     data () {
       return {
+        BASE_URL: BASE_URL,
+        fileList: [],
         mdl: {},
         // 高级搜索 展开/关闭
         advanced: false,
@@ -133,6 +146,20 @@
       this.refresh(this.$attrs)
     },
     methods: {
+      handleFileChange( {fileList} ) {
+      // debugger
+      if (fileList[0].status !== 'uploading') {
+        if (fileList[0].response.code == 200) {
+          this.$message.info('上传成功！')
+        } else {
+          this.$message.error('上传失败，错误信息：' + fileList[0].response.message) 
+        }
+        this.fileList = []
+      } else {
+        this.fileList = fileList
+      }
+      
+    },
       handleAdd () {
         this.$emit('onAddUser')
       },
