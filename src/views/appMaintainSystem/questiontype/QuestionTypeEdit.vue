@@ -10,59 +10,81 @@
   >
     <a-spin :spinning="confirmLoading">
       <a-form :layout="formLayout" :form="form">
-        		<a-form-item label="id" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="false">
+        <a-form-item label="id" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="false">
           <a-input :disabled="modalData.disabled" v-decorator="['id', {}]" />
         </a-form-item>
-		<a-form-item label="类型名称" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+        <a-form-item label="类型名称" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['typeName', {}]" />
         </a-form-item>
-		<a-form-item label="显示顺序" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+        <a-form-item label="所属一级类型" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+          <a-select
+            :disabled="modalData.disabled"
+            show-search
+            :filter-option="filterOption"
+            v-decorator="['fstLvlType.id', {}]"
+          >
+            <a-select-option
+              v-for="fstLvlType in fstLvlTypeList"
+              :key="fstLvlType.id"
+              :value="fstLvlType.id"
+            >
+              {{ fstLvlType.typeName }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="显示顺序" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['showOrder', {}]" />
         </a-form-item>
-
       </a-form>
     </a-spin>
   </a-modal>
 </template>
 
 <script>
-import { questionTypePost, questionTypePut } from '@/api/questionType'
+import { questionTypePost, questionTypePut, questionTypeFstLvl, questionTypeSecLvl } from '@/api/questionType'
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['modalData'],
-  created () {
-  },
-  data () {
+  created() {},
+  data() {
     return {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 5 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 16 },
       },
       formLayout: 'horizontal',
-      confirmLoading: false
+      confirmLoading: false,
+      fstLvlTypeList: []
     }
   },
   watch: {
-    modalData (modalData) {
+    modalData(modalData) {
       this.form.resetFields()
       if (modalData.visible === true) {
         this.$nextTick(() => {
           delete this.modalData.record.delTag
           this.form.setFieldsValue({ ...this.modalData.record })
+          this.getFstLvl()
         })
       }
-    }
+    },
   },
-  beforeCreate () {
+  beforeCreate() {
     this.form = this.$form.createForm(this)
     // console.log('form::', this.form)
   },
   methods: {
-    handleOk () {
+    getFstLvl() {
+      questionTypeFstLvl()
+        .then(res => {
+          this.fstLvlTypeList = res.result
+        }).catch(err => {})
+    },
+    handleOk() {
       // 触发表单验证
       this.form.validateFields((err, values) => {
         // 验证表单没错误
@@ -70,7 +92,7 @@ export default {
           // console.log('form values', values)
           var api = values.id === undefined ? questionTypePost : questionTypePut
           api(values)
-            .then(res => {
+            .then((res) => {
               if (res.code === 200) {
                 this.$emit('handleModalEvent', res)
                 this.handleCancel()
@@ -82,9 +104,12 @@ export default {
         }
       })
     },
-    handleCancel () {
+    filterOption(input, option) {
+      return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    },
+    handleCancel() {
       this.modalData.visible = false
-    }
-  }
+    },
+  },
 }
 </script>
