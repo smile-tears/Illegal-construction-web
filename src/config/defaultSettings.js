@@ -13,12 +13,14 @@
  *
  */
 // const url = process.env.NODE_ENV === 'production' ? '218.2.234.194:8081' : 'localhost:8088'
-const url = process.env.NODE_ENV === 'production' ? '49.64.220.144:8089' : 'localhost:8088'
+const url = '49.64.220.144:8088'
+const vedioUrl = process.env.NODE_ENV === 'production' ? '49.64.220.144:8089' : 'localhost:8089'
 
 export default {
   // wsUrl: 'ws://localhost:8088/websocket/', // 218.2.234.194
+  url: 'http://' + url + '/',
   wsUrl: 'ws://' + url + '/websocket/',
-  chatUrl: 'https://' + url + '/cityManage/vedio',
+  chatUrl: 'https://' + vedioUrl + '/cityManage/vedio',
   primaryColor: '#52C41A', // primary color of ant design
   navTheme: 'dark', // theme for nav menu
   layout: 'topmenu', // nav menu position: sidemenu or topmenu

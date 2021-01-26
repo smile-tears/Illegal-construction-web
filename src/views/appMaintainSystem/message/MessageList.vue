@@ -65,8 +65,8 @@ const columns = [
     key: 'title',
   },
   { 
-    title: '内容',
-    dataIndex: 'content',
+    title: '摘要',
+    dataIndex: 'remark',
     ellipsis: true,
     key: 'content',
   },

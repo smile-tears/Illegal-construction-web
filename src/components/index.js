@@ -12,6 +12,7 @@ import Radar from '@/components/Charts/Radar'
 import RankList from '@/components/Charts/RankList'
 import TransferBar from '@/components/Charts/TransferBar'
 import TagCloud from '@/components/Charts/TagCloud'
+import WangEditor from '@/components/Editor/WangEditor'
 
 // pro components
 import AvatarList from '@/components/AvatarList'
@@ -65,6 +66,6 @@ export {
   TagSelect,
   StandardFormRow,
   ArticleListContent,
-
-  Dialog
+  Dialog,
+  WangEditor
 }
