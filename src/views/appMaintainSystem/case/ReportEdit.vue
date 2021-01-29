@@ -49,12 +49,16 @@
 
         <a-form-item label="一级问题类型" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
 
-          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.typeName }}</span>
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.typeName2 }}</span>
         </a-form-item>
 
         <a-form-item label="二级问题类型" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
 
-          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.typeName2 }}</span>
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.typeName }}</span>
+        </a-form-item>
+
+        <a-form-item label="其它问题类型" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
+          <span v-if="modalData.view || modalData.page != 0">{{ modalData.record.otherQuestionType }}</span>
         </a-form-item>
 
         <a-form-item label="地址" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
