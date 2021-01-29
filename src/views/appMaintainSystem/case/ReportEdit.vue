@@ -184,7 +184,7 @@
             ]"
             style="width: 200px"
           />
-          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.limittimes }}</span>（小时）
+          <span v-if="modalData.view  || modalData.page != 0">{{ modalData.record.limittimes }}</span>（天）
         </a-form-item>
 
         <a-form-item label="经度" :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" style="width: 735px">
