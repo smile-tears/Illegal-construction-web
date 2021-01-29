@@ -111,7 +111,7 @@ const columns = [
     key: 'reportorName'
   },
   {
-    title: '处置时限',
+    title: '处置时限（天）',
     dataIndex: 'limittimes',
     key: 'limittimes'
   },
