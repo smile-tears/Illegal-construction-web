@@ -453,12 +453,13 @@
                 label="照片"
                 hasFeedback
               >
+                <!--action="/api/upload-avatar"-->
                 <a-upload
                   name="avatar"
                   list-type="picture-card"
                   class="avatar-uploader"
                   :show-upload-list="false"
-                  action="/api/upload-avatar"
+                  :action="upload_url"
                   :before-upload="beforeUpload"
                   @change="handleChangeAvatar"
                 >
@@ -587,6 +588,7 @@ import 'ant-design-vue/es/tree-select/style/index.less'
 import { postUser, getSubCompanyUserTree, getJobList, getWorkInfoList, postWorkInfo, deleteWorkInfo, getFamilyInfoList, postFamilyInfo, deleteFamilyInfo } from '@/api/manage'
 import pick from 'lodash.pick'
 
+const BASE_URL = process.env.NODE_ENV === 'production' ? '' : '/api'
 function getBase64(img, callback) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
@@ -600,6 +602,8 @@ export default {
   },
   data () {
     return {
+      BASE_URL: BASE_URL,
+      upload_url: BASE_URL+'/upload-avatar',
       colsm:24,
       colmd:12,
       labelCol: {
