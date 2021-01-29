@@ -44,9 +44,10 @@ const user = {
           //
 
           const result = response.result
-          console.log(result.name, result.avatar)
-          window.sessionStorage.setItem('name',result.name)
-          window.sessionStorage.setItem('avatar',result.avatar)
+          var avatar = (result.avatar && result.avatar != 'null' ) ? result.avatar : 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
+          console.log(result.name, result.avatar, avatar)
+          window.sessionStorage.setItem('name', result.name)
+          window.sessionStorage.setItem('avatar', avatar)
           // commit('SET_NAME', { name: result.name, welcome: welcome() })
           // commit('SET_AVATAR', result.avatar)
 

@@ -900,7 +900,7 @@ export default {
       }
       if (info.file.status === 'done') {
         if(info.file.response.code === 200){
-          this.imageUrl = "/api" + info.file.response.result.url
+          this.imageUrl = BASE_URL + info.file.response.result.url
           this.loading = false;
         }
       }
