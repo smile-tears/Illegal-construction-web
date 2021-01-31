@@ -70,7 +70,7 @@
         <!--饼图-->
       <!--</a-card>-->
 
-      <a-card class="antd-pro-pages-dashboard-analysis-salesCard chartContainer"  :bordered="false" title="违建类型占比" :style="{ height: '100%' }">
+      <a-card class="antd-pro-pages-dashboard-analysis-salesCard chartContainer"  :bordered="false" title="违规类型占比" :style="{ height: '100%' }">
 
         <div>
           <v-chart :force-fit="true" :height="405" :data="pieData" :scale="pieScale">
@@ -86,7 +86,7 @@
     </a-col>
 
     <a-col :md="16" :sm="16">
-      <a-card class="antd-pro-pages-dashboard-analysis-salesCard chartContainer"  :bordered="false" title="社区案件数" :style="{ height: '100%' }">
+      <a-card class="antd-pro-pages-dashboard-analysis-salesCard chartContainer"  :bordered="false" title="辖区案件数" :style="{ height: '100%' }">
 
         <div>
           <stacking-bar :data="barData2" :xArr="areaArr" :style="{padding:'0px'}"/>
