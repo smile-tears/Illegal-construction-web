@@ -338,7 +338,21 @@
             })
             _this.pieData = dv.rows
 
-            _this.barData2 = res.result.barData;
+//            _this.barData2 = res.result.barData;
+            _this.barData2 = [];
+            for(var i in res.result.barData){
+              var obj = res.result.barData[i];
+              for(var j in obj){
+                if(j != "name"){
+                  if(obj[j] !=0){
+                    _this.barData2.push(obj)
+                    continue
+                  }
+                }
+              }
+            }
+
+
             _this.data = res.result.tableData;
             var areaArr = [];
             if(_this.barData2){
