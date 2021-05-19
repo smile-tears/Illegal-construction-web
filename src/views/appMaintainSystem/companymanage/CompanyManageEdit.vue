@@ -29,16 +29,27 @@
             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
             :tree-data="personTreeData"
             placeholder
-            tree-default-expand-all
+            :tree-default-expand-all="false"
           ></a-tree-select>
         </a-form-item>
         <a-form-item label="公司法人" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-          <a-input :disabled="modalData.disabled" v-decorator="['legalPerson', {}]" />
+          <!-- <a-input :disabled="modalData.disabled" v-decorator="['legalPerson', {}]" /> -->
+          <a-tree-select
+            show-search
+            treeNodeFilterProp="title" 
+            :disabled="modalData.disabled"
+            v-decorator="['legalPerson', {}]"
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            :tree-data="personTreeData"
+            placeholder
+            :tree-default-expand-all="false"
+          ></a-tree-select>
         </a-form-item>
 
-        <a-form-item label="联系方式" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
+        <!-- <a-form-item label="联系方式" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['mobile', {}]" />
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item label="企业规模" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
           <a-input :disabled="modalData.disabled" v-decorator="['qygm', {}]" />
         </a-form-item>
@@ -141,6 +152,8 @@ export default {
   props: ['modalData'],
   created() {
     this.gridList()
+  },
+  activated() {
     this.getSubCompanyUserTree()
   },
   data() {
