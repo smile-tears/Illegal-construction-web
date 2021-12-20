@@ -482,9 +482,9 @@ export default {
     // console.log('form::', this.form)
   },
   created() {
-    this.getSubCompanyUserTree()
-    this.gridList()
-    this.companyManageList()
+    // this.getSubCompanyUserTree()
+    // this.gridList()
+    // this.companyManageList()
   },
   methods: {
     handleCompanyChange(value) {

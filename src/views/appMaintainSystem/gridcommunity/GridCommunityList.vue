@@ -139,6 +139,11 @@
       key: 'number',
     },
     {
+      title: '显示顺序',
+      dataIndex: 'showOrder',
+      key: 'showOrder',
+    },
+    {
       title: '操作',
       key: 'action',
       align: 'center',
@@ -253,20 +258,26 @@
         }
       },
       del(type, record) {
-        var ids = type === 'single' ? [record.id] : this.selectedRowKeys
-        gridCommunityDelete(ids)
-          .then(res => {
-            if (res.code === 200) {
-              this.loadData();
-              // this.eventBus.$emit('refreshGridTree', this.GridNode)
-            } else {
-              this.$message.error(res.message)
-            }
-          })
-          // eslint-disable-next-line handle-callback-err
-          .catch(err => {
-            // Do something
-          })
+        var that = this
+        this.$confirm({
+          title: '您确定要删除网格?',
+          content: '',
+          onOk() {
+            var ids = type === 'single' ? [record.id] : that.selectedRowKeys
+            gridCommunityDelete(ids)
+              .then(res => {
+                if (res.code === 200) {
+                  that.loadData();
+                  // this.eventBus.$emit('refreshGridTree', this.GridNode)
+                } else {
+                  that.$message.error(res.message)
+                }
+              }).catch(err => {})
+          },
+          onCancel() {},
+        });
+
+        
       },
       edit(record) {
         this.modalData = {

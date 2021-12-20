@@ -153,7 +153,7 @@ export default {
   created() {
     this.gridList()
   },
-  activated() {
+  mounted() {
     this.getSubCompanyUserTree()
   },
   data() {

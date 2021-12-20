@@ -22,14 +22,15 @@
             <!-- treeNodeFilterProp="title" show-search 实现title检索-->
             <a-tree-select
               multiple
-              :disable-branch-nodes="true"
+              show-search
+              treeNodeFilterProp="title" 
               :disabled="modalData.disabled"
-              v-decorator="['manager', {initialValue:''}]"
+              v-decorator="['manager', {}]"
               style="width: 250px"
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
               :tree-data="depUserTreeData"
               placeholder="Please select"
-              tree-default-expand-all
+              :tree-default-expand-all="false"
               @select="initTelephone"
             ></a-tree-select>
           </a-form-item>
@@ -45,14 +46,14 @@
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
               :tree-data="depTreeData"
               placeholder="Please select"
-              tree-default-expand-all
+              :tree-default-expand-all="false"
             ></a-tree-select>
           </a-form-item>
           <a-form-item style="margin-left: 40px" label="区域编号" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
             <a-input  style="width: 250px" :disabled="modalData.disabled" v-decorator="['number', {}]"/>
           </a-form-item>
           <a-form-item label="显示顺序" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-            <a-input-number  style="width: 250px" :disabled="modalData.disabled" :min="0" v-decorator="['showOrder', {}]" />
+            <a-input-number  style="width: 250px" :disabled="modalData.disabled" :min="0" v-decorator="['showOrder', {}]" :precision="0"/>
           </a-form-item>
 
 
@@ -61,12 +62,12 @@
               multiple
               :disable-branch-nodes="true"
               :disabled="modalData.disabled"
-              v-decorator="['patrolManager', {initialValue:''}]"
+              v-decorator="['patrolManager', {}]"
               style="width: 250px"
               :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
               :tree-data="depUserTreeData"
               placeholder="Please select"
-              tree-default-expand-all
+              :tree-default-expand-all="false"
             ></a-tree-select>
           </a-form-item>
 
@@ -153,7 +154,10 @@
       modalData(modalData) {
         this.form.resetFields();
         if (modalData.visible === true) {
+          
           this.$nextTick(() => {
+            // var that = this
+            // debugger
             delete this.modalData.record.delTag;
             if (!this.modalData.record.id) {
               this.modalData.record.visible = 0
@@ -168,9 +172,22 @@
               }
             });
             delete this.modalData.record.visible;
-            this.modalData.record.manager = this.modalData.record.manager.split(',')
-            this.modalData.record.patrolManager = this.modalData.record.patrolManager.split(',')
+            if (this.modalData.record.manager === '') {
+              this.modalData.record.manager = []
+            } else {
+              this.modalData.record.manager = this.modalData.record.manager.split(',')
+            }
+            if (this.modalData.record.patrolManager === '') {
+              this.modalData.record.patrolManager = []
+            } else {
+              this.modalData.record.patrolManager = this.modalData.record.patrolManager.split(',')
+            }
+            
+            
             this.form.setFieldsValue({...this.modalData.record});
+            // 修复二次打开多选框无法带出值的bug
+            this.modalData.record.manager = this.modalData.record.manager.join(',')
+            this.modalData.record.patrolManager = this.modalData.record.patrolManager.join(',')
           });
 
         }
@@ -215,7 +232,7 @@
             var obj = Object.assign({},values);
             obj.manager = values.manager.join(',')
             obj.patrolManager = values.patrolManager.join(',')
-            debugger
+            // debugger
             api(obj)
               .then(res => {
                 if (res.code === 200) {
@@ -235,14 +252,14 @@
         this.modalData.visible = false
       },
       getGridTree() {
-        gridTree()
-          .then(res => {
-            if (res.code === 200) {
-              this.treeData = res.result
-            }
-          })
-          .catch(() => {
-          })
+        // gridTree()
+        //   .then(res => {
+        //     if (res.code === 200) {
+        //       this.treeData = res.result
+        //     }
+        //   })
+        //   .catch(() => {
+        //   })
       },
       getGridDepTree() {
         getSubCompanyTree()
