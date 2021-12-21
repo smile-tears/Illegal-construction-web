@@ -2,15 +2,30 @@
   <div class="container">
     <div class="table-page-search-wrapper">
       <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="8" :sm="8">
+        <a-row :gutter="0">
+          <a-col :md="4" :sm="8">
             <a-form-item label="标题">
-              <!--<a-input v-model="queryParam.datitletetime" placeholder=""/>-->
-              <!-- <a-date-picker  v-model="queryParam.title"/> -->
-              <a-input v-model="queryParam.title" style="width: 300px;"/>
+              <a-input v-model="queryParam.title" style="width: 150px;"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="4" :sm="8">
+            <a-form-item label="负责人">
+              <a-input v-model="queryParam.manager" style="width: 150px;"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="4" :sm="8">
+            <a-form-item label="安全员">
+              <a-input v-model="queryParam.reportorName" style="width: 150px;"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
+            <a-form-item label="上报日期">
+              <a-date-picker v-model="queryParam.startDate" />-
+              <a-date-picker v-model="queryParam.endDate" />
+            </a-form-item>
+          </a-col>
+          
+          <a-col :md="4" :sm="8">
             <a-button type="primary" icon="search" @click="loadData">查询</a-button>
             <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
           </a-col>
@@ -80,6 +95,7 @@ import { caseInfoCityList, caseInfoCityList2, caseInfoCityDelete, exportWord } f
 import ReportEdit from './ReportEdit'
 import qs from 'qs'
 import { Ellipsis } from '@/components'
+import moment from 'moment';
 const columns = [
   {
     title: '序号',
@@ -123,7 +139,8 @@ const columns = [
   {
     title: '备注',
     dataIndex: 'caseDesc',
-    key: 'caseDesc'
+    key: 'caseDesc',
+    width: 200
   },
   {
     title: '地址',
@@ -175,6 +192,7 @@ export default {
     }
   },
   methods: {
+    moment,
     init() {
       this.loadData()
     },
@@ -190,6 +208,20 @@ export default {
         
         })
     },
+    dateFormat(time) {
+      var date = new Date(time)
+      var year = date.getFullYear()
+      /* 在日期格式中，月份是从0开始的，因此要加0
+       * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+       * */
+      var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+      var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+      var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+      var minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+      var seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+      // 拼接
+      return year + '-' + month + '-' + day
+    },
     loadData () {
       var params = {
         pageNo: this.pagination.current,
@@ -198,7 +230,10 @@ export default {
         reportor: window.sessionStorage.getItem('id'),
         ...this.queryParam
       }
-      var a = this.$store
+      if (params.startDate) params.startDate = this.dateFormat(params.startDate)
+      if (params.endDate) params.endDate = this.dateFormat(params.endDate)
+      
+      // debugger
       caseInfoCityList2(qs.stringify(params))
         .then(res => {
           this.data = res.result.data
