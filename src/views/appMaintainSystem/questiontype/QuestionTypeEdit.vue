@@ -33,7 +33,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="显示顺序" :label-col="labelCol" :wrapper-col="wrapperCol" v-show="true">
-          <a-input :disabled="modalData.disabled" v-decorator="['showOrder', {}]" />
+          <a-input-number :disabled="modalData.disabled" v-decorator="['showOrder', {}]" :precision="0" />
         </a-form-item>
       </a-form>
     </a-spin>

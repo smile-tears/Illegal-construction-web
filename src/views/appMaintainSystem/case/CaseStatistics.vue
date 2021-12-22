@@ -40,7 +40,7 @@
                   :dropdown-style="{ maxHeight: '300px', overflow: 'auto' }"
                   :tree-data="personTreeData"
                   placeholder
-                  tree-default-expand-all
+                  :tree-default-expand-all="false"
                 ></a-tree-select>
               </a-form-item>
             </a-col>
