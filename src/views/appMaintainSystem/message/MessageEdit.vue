@@ -166,6 +166,10 @@ export default {
             }
           }
 
+          this.value = []
+          this.selectUser([])
+          this.onChange(this.value)
+
           this.form.setFieldsValue({ ...this.modalData.record })
         })
       }

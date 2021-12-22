@@ -44,8 +44,8 @@
     },
     {
       title: '法人',
-      dataIndex: 'legalPerson',
-      key: 'legalPerson'
+      dataIndex: 'legalPersonName',
+      key: 'legalPersonName'
     },
     {
       title: '联系电话',

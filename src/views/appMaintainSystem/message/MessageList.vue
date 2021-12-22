@@ -126,18 +126,37 @@ export default {
     },
     del(type, record) {
       var ids = type === 'single' ? [record.id] : this.selectedRowKeys
-      messageDelete(ids)
-        .then(res => {
-          if (res.code === 200) {
-            this.loadData()
-          } else {
+      if(ids.length > 0){
+        messageDelete(ids)
+          .then(res => {
+            if (res.code === 200) {
+              this.loadData()
+            } else {
 //            this.$message.error(res.message)
+            }
+          })
+          // eslint-disable-next-line handle-callback-err
+          .catch(err => {
+            // Do something
+          })
+      }else{
+        this.$warning({
+          title: '警告',
+          content: `至少选择一条记录`,
+          // okText: '删除',
+          // okType: 'danger',
+          cancelText: '取消',
+          // onOk () {
+          //   console.log('OK')
+          //   // 在这里调用删除接口
+          // },
+          onCancel () {
+            console.log('Cancel')
           }
         })
-        // eslint-disable-next-line handle-callback-err
-        .catch(err => {
-          // Do something
-        })
+        //至少选中一条信息
+      }
+
     },
     edit(record) {
       this.modalData = {
